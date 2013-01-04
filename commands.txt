@@ -1,0 +1,5 @@
+cat lower2.lst | cut -b 1-3 | uniq | egrep "[a-z]{3}" > tri_beg.txt
+cat lower2.lst | egrep "^[a-z]{2}$" > bi.txt
+
+n = 4,164, p = 0.001 (1 in 1,000) → m = 59,869 (7.31KB), k = 10
+n = 456, p = 0.001 (1 in 1,000) → m = 6,557 (820B), k = 10

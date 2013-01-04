@@ -1,0 +1,3 @@
+[submodule "bloomfilter.js"]
+	path = bloomfilter.js
+	url = https://github.com/jasondavies/bloomfilter.js.git
