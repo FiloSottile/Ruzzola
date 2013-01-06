@@ -29,57 +29,96 @@ b64_de = (data) ->
       res.push(o1, o2, o3)
   res
 
-window.bloom = {}
-window.bloom.ready = false
-window.bloom.test = (w) ->
-  if w.length == 20
-    return [false, window.bloom.words.test w]
-  if w.length == 1
-    return [true, false]
-  if !window.bloom[w.length].test w
-    return [false, false]
-  [true, window.bloom.words.test w]
+DL = 1
+TL = 2
+DW = 3
+TW = 4
 
-grid = [['a', 'c', 'a', 'c'],
-        ['a', 'c', 'e', 'b'],
-        ['a', 's', 't', 'b'],
-        ['a', 'c', 'a', 'b']]
+require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
-vicini = (x, y) ->
-  res = []
-  for oy in [-1..1]
-    for ox in [-1..1]
-      if (0 <= x-ox <= 3) and (0 <= y-oy <= 3) and (x-ox != 0 or y-oy != 0)
-        res.push [x-ox, y-oy]
-  res
+  values = {}
+  values["it"] = $.parseJSON '{ "a" : 1, "b" : 5, "c" : 2, "d" : 5, "e" : 1, "f" : 5,
+                   "g" : 8, "h" : 8, "i" : 1, "l" : 3, "m" : 3, "n" : 3,
+                   "o" : 1, "p" : 5, "q": 100, "r" : 2, "s" : 2, "t" : 2,
+                   "u" : 3, "v" : 5, "z" : 8 }'
 
-walk = ->
-  for walk_x in [0..3]
-    for walk_y in [0..3]
-      discover walk_x, walk_y
+  window.bloom = {}
+  window.bloom.ready = false
+  window.bloom.test = (w) ->
+    if w.length == 20
+      return [false, window.bloom.words.test w]
+    if w.length == 1
+      return [true, false]
+    if !window.bloom[w.length].test w
+      return [false, false]
+    [true, window.bloom.words.test w]
 
-found = (word, path) ->
-  # TODO
-  console.log word, path
+  grid = ['r', 'n', 'o', 'r',
+          't', 'm', 'e', 'r',
+          'r', 'r', 'i', 't',
+          'n', 'c', 'a', 'p']
 
-discover = (x, y, len=0, word='', path='') ->
-  len++
-  path += " - #{x}##{y}"
-  word += grid[y][x]
-  [go, is_word] = bloom.test word
-  found word, path if is_word
-  if go
-    for [vx, vy] in vicini x, y
-      if path.split(' - ').indexOf("#{vx}##{vy}") == -1
-        discover vx, vy, len, word, path
+  multipliers = { '2': TW, '3': 'DL', '5': DW, '8': TL, '12': DW }
 
-require ["jquery", "underscore", "bloomfilter"], ($, _, bloomfilter) ->
+  vicini = (pos) ->
+    [x, y] = [pos % 4, Math.floor pos / 4]
+    res = []
+    for oy in [-1..1]
+      for ox in [-1..1]
+        if (0 <= x-ox <= 3) and (0 <= y-oy <= 3) and (x-ox != 0 or y-oy != 0)
+          res.push (x-ox) + (y-oy) * 4
+    res
+
+  workers = 0
+  window.walk = (g) ->
+    if g
+      grid = g.split ''
+    for pos in [0...16]
+        _.defer discover, pos
+        workers += 1
+
+  window.points = (word, path) ->
+    res = 0
+    for n in [0...word.length]
+      res += values["it"][word.charAt n]
+    mul = 1
+    for own pos, type of multipliers
+      if path.split(' ').indexOf(pos) != -1
+        res += values["it"][grid[pos]] if type == DL
+        res += 2 * values["it"][grid[pos]] if type == TL
+        mul *= 2 if type == DW
+        mul *= 3 if type == TW
+    res *= mul
+    res += if word.length > 4 then (word.length - 4) * 5 else 0
+    res
+
+  found = (word, path) ->
+    # TODO
+    console.log word, path, points(word, path)
+
+  done = ->
+    #TODO
+    console.log 'done'
+
+  discover = (pos, len=0, word='', path='') ->
+    len++
+    path += " #{pos}"
+    word += grid[pos]
+    [go, is_word] = bloom.test word
+    found word, path.trim() if is_word
+    if go
+      for v_pos in vicini pos
+        if path.split(' ').indexOf("#{v_pos}") == -1
+          discover v_pos, len, word, path
+    workers -= 1 if len == 1
+    done() if workers == 0
+
   jQuery.get "/data/it.bloom", (data) ->
     bloom_data = data.split ";"
     bloom_filters = window.bloom
     i = 0
     bloom_filters[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..19]
-    bloom_filters.words = bloomfilter.fromBytestream b64_de bloom_data[i]
+    bloom_filters.words = bloomfilter.fromBytestream b64_de bloom_data[i++]
     bloom_filters.ready = true
     window.bloom = bloom_filters
   , "text"
