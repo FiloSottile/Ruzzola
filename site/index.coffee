@@ -48,6 +48,8 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   bloom.test = (w) ->
     if w.length == 20
       return [false, bloom.words.test w]
+    if w.length > 14
+      return [true, bloom.words.test w]
     if w.length == 1
       return [true, false]
     if !bloom[w.length].test w
@@ -116,7 +118,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   jQuery.get "/data/it.bloom", (data) ->
     bloom_data = data.split ";"
     i = 0
-    bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..19]
+    bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..14]
     bloom.words = bloomfilter.fromBytestream b64_de bloom_data[i++]
     bloom.ready = true
   , "text"
