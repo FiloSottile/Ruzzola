@@ -29,36 +29,34 @@ b64_de = (data) ->
       res.push(o1, o2, o3)
   res
 
-DL = 1
-TL = 2
-DW = 3
-TW = 4
-
 require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
-  values = {}
-  values["it"] = $.parseJSON '{ "a" : 1, "b" : 5, "c" : 2, "d" : 5, "e" : 1, "f" : 5,
-                   "g" : 8, "h" : 8, "i" : 1, "l" : 3, "m" : 3, "n" : 3,
-                   "o" : 1, "p" : 5, "q": 100, "r" : 2, "s" : 2, "t" : 2,
-                   "u" : 3, "v" : 5, "z" : 8 }'
+  ###
+        CHEAT LOGIC
+  ###
 
-  window.bloom = {}
-  window.bloom.ready = false
-  window.bloom.test = (w) ->
+  DL = "DL"
+  TL = "TL"
+  DW = "DW"
+  TW = "TW"
+
+  values = {}
+  values["it"] = { a : 1, b : 5, c : 2, d : 5, e : 1, f : 5, g : 8, h : 8, i : 1, l : 3, m : 3, n : 3, o : 1, p : 5, q : 100, r : 2, s : 2, t : 2, u : 3, v : 5, z : 8 }
+
+  bloom = {}
+  bloom.ready = false
+  bloom.test = (w) ->
     if w.length == 20
-      return [false, window.bloom.words.test w]
+      return [false, bloom.words.test w]
     if w.length == 1
       return [true, false]
-    if !window.bloom[w.length].test w
+    if !bloom[w.length].test w
       return [false, false]
-    [true, window.bloom.words.test w]
+    [true, bloom.words.test w]
 
-  grid = ['r', 'n', 'o', 'r',
-          't', 'm', 'e', 'r',
-          'r', 'r', 'i', 't',
-          'n', 'c', 'a', 'p']
-
-  multipliers = { '2': TW, '3': 'DL', '5': DW, '8': TL, '12': DW }
+  grid = []
+  multipliers = {}
+  results = {}
 
   vicini = (pos) ->
     [x, y] = [pos % 4, Math.floor pos / 4]
@@ -70,14 +68,13 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     res
 
   workers = 0
-  window.walk = (g) ->
-    if g
-      grid = g.split ''
+  walk = () ->
+    results = {}
     for pos in [0...16]
         _.defer discover, pos
         workers += 1
 
-  window.points = (word, path) ->
+  calc_points = (word, path) ->
     res = 0
     for n in [0...word.length]
       res += values["it"][word.charAt n]
@@ -93,12 +90,15 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     res
 
   found = (word, path) ->
-    # TODO
-    console.log word, path, points(word, path)
+    p = calc_points(word, path)
+    if !results[word]? or results[word].points < p
+      results[word] = { points: p, path: path }
 
   done = ->
-    #TODO
-    console.log 'done'
+    sorted = ([o.points, o.path, word] for word, o of results)
+    sorted = _.sortBy(sorted, (x) -> x[0])
+    for [points, path, word] in sorted
+      console.log points, word, path
 
   discover = (pos, len=0, word='', path='') ->
     len++
@@ -115,10 +115,55 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
   jQuery.get "/data/it.bloom", (data) ->
     bloom_data = data.split ";"
-    bloom_filters = window.bloom
     i = 0
-    bloom_filters[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..19]
-    bloom_filters.words = bloomfilter.fromBytestream b64_de bloom_data[i++]
-    bloom_filters.ready = true
-    window.bloom = bloom_filters
+    bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..19]
+    bloom.words = bloomfilter.fromBytestream b64_de bloom_data[i++]
+    bloom.ready = true
   , "text"
+
+
+  ###
+        FRONTEND STUFF
+  ###
+
+  dom_grid = []
+  multiplier_state = null
+
+  jQuery(document).ready ->
+
+    $(".grid textarea").each (i) ->
+      dom_grid[i] = this
+      $(this).attr "data-grid-i", i
+
+    $(".grid textarea").keypress (e) ->
+      i = parseInt $(this).attr("data-grid-i"), 10
+      if i < 15
+        $(dom_grid[i+1]).focus()
+      grid[i] = $(this).val() or String.fromCharCode e.which
+
+    $(".grid textarea").keydown (e) ->
+      i = parseInt $(this).attr("data-grid-i"), 10
+      if e.keyCode == 8
+        if !$(this).val() and i > 0
+          $(dom_grid[i-1]).focus()
+
+
+    $(".multipliers td").click ->
+      multiplier_state = $(this).attr "data-multiplier"
+      $(".grid textarea").css "cursor", "pointer"
+
+    $(".grid textarea").bind 'focus click dblclick', (e) ->
+      if multiplier_state?
+        $(".grid textarea").css "cursor", "auto"
+        multipliers[parseInt $(this).attr("data-grid-i"), 10] = multiplier_state
+        $(this).attr "data-multiplier", multiplier_state
+        multiplier_state = null
+        $(this).blur()
+
+    $(".walk").click walk
+    $(".clear").click ->
+      for cell in dom_grid
+        $(cell).val('')
+        $(cell).attr "data-multiplier", ""
+      grid = {}
+      multipliers = {}
