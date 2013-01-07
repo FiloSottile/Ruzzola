@@ -1,18 +1,21 @@
 bloomfilter = require "./bloomfilter.js/bloomfilter.js"
 fs = require "fs"
 
-filename = process.argv[2]
-[ m, k ] = ( parseInt(x, 10) for x in process.argv[3..]  )
-# TODO calculate m, k
-
-bloom = new bloomfilter.BloomFilter m, k
+elements = []
 
 process.stdin.resume()
 process.stdin.setEncoding 'utf8'
 process.stdin.on 'data', (chunk) ->
-  for word in chunk.trim().split('\n')
-    bloom.add word
+  elements = elements.concat chunk.trim().split('\n')
 
 process.stdin.on 'end', ->
-  #fs.writeFile filename, Buffer bloom.toBytestream()
-  fs.writeFile filename, Buffer(bloom.toBytestream()).toString('base64')
+	n = elements.length
+	p = 0.0001
+	m = Math.ceil((n * Math.log(p)) / Math.log(1.0 / (Math.pow(2.0, Math.log(2.0)))))
+	k = Math.round(Math.log(2.0) * m / n)
+	bloom = new bloomfilter.BloomFilter m, k
+
+	for word in elements
+	  bloom.add word.trim().toLowerCase()
+
+  process.stdout.write Buffer(bloom.toBytestream()).toString('base64')
