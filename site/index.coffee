@@ -43,17 +43,13 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   values = {}
   values["it"] = { a : 1, b : 5, c : 2, d : 5, e : 1, f : 5, g : 8, h : 8, i : 1, l : 3, m : 3, n : 3, o : 1, p : 5, q : 100, r : 2, s : 2, t : 2, u : 3, v : 5, z : 8 }
 
-  bloom = {}
+  window.bloom = {}
   bloom.ready = false
   bloom.test = (w) ->
-    if w.length == 20
+    if w.length == 14
       return [false, bloom.words.test w]
-    if w.length > 14
-      return [true, bloom.words.test w]
-    if w.length == 1
-      return [true, false]
-    if !bloom[w.length].test w
-      return [false, false]
+    else if w.length in [ 2, 3, 4, 6, 8, 10, 12 ]
+      if !bloom[w.length].test w then return [false, false] else return [true, bloom.words.test w]
     [true, bloom.words.test w]
 
   grid = []
@@ -118,7 +114,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   jQuery.get "/data/it.bloom", (data) ->
     bloom_data = data.split ";"
     i = 0
-    bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2..14]
+    bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2, 3, 4, 6, 8, 10, 12]
     bloom.words = bloomfilter.fromBytestream b64_de bloom_data[i++]
     bloom.ready = true
   , "text"

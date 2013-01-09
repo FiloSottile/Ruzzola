@@ -1,7 +1,9 @@
 #! /bin/bash
 rm "$2"
-for i in `seq 2 14`; do
-	cat "$1" | cut -b 1-$i | egrep -i "[a-z]{$i}" | uniq | coffee make_bloom.coffee >> "$2"
+cat "$1" | sed 'y/ /\n/' | egrep -v -i "[a-z]{15}" | egrep -i "[a-z]{2}" | sort > preproc.txt
+for i in 2 3 4 6 8 10 12; do
+	cat preproc.txt | cut -b 1-$i | egrep -i "[a-z]{$i}" | uniq | coffee make_bloom.coffee >> "$2"
 	echo -n ";" >> "$2"
 done
-cat "$1" | coffee make_bloom.coffee words.bloom >> "$2"
+cat preproc.txt | coffee make_bloom.coffee words.bloom >> "$2"
+rm preproc.txt

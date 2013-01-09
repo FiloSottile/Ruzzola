@@ -17,6 +17,6 @@ process.stdin.on 'end', ->
   process.stderr.write "#{n}, #{p}, #{m}, #{k}\n"
 
   for word in elements
-    bloom.add word.trim().toLowerCase()
+    bloom.add word.trim().toLowerCase().replace(/[^a-z]/, '')
 
   process.stdout.write Buffer(bloom.toBytestream()).toString('base64')
