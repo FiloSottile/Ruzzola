@@ -68,6 +68,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   workers = 0
   walk = () ->
     results = {}
+    reset()
     for pos in [0...16]
         _.defer discover, pos
         workers += 1
@@ -95,8 +96,9 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   done = ->
     sorted = ([o.points, o.path, word] for word, o of results)
     sorted = _.sortBy(sorted, (x) -> x[0])
-    for [points, path, word] in sorted
-      console.log points, word, path
+    sorted.reverse()
+    populate_wordslist sorted
+    next()
 
   discover = (pos, len=0, word='', path='') ->
     len++
@@ -126,20 +128,59 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
   dom_grid = []
   multiplier_state = null
+  current_word = null
+
+  reset = ->
+    $(".words-list ul").html ''
+    $(".good-button, .bad-button, .current-word").hide()
+    current_word = null
+
+  populate_wordslist = (words) ->
+    for [points, path, word] in words[0..50]
+      path_class = ''
+      path_cells = path.split ' '
+      for cell_i in [0..(path_cells.length - 2)]
+        path_class += "path-#{path_cells[cell_i]}-#{path_cells[cell_i+1]} "
+      $(".words-list ul").append("""<li data-path-class="#{path_class}">
+                                      <span class="word">#{word}</span>
+                                      <span class="points">#{points}</span>
+                                    </li>""")
+
+  next = ->
+    if current_word?
+      $(".words-list li").eq(current_word).toggleClass "active"
+      for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
+        $(".grid").eq(current_word).toggleClass path_class
+      current_word += 1
+    else
+      $(".good-button, .bad-button, .current-word").show()
+      current_word = 0
+    $(".words-list li").eq(current_word).toggleClass "active"
+    $(".current-word").text $(".words-list li > span.word").eq(current_word).text()
+    for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
+      $(".grid").eq(current_word).toggleClass path_class
+
+  bad = ->
+    console.log $(".words-list li > span.word").eq(current_word).text()
+    next()
+
 
   jQuery(document).ready ->
+    reset()
 
     $(".grid textarea").each (i) ->
       dom_grid[i] = this
       $(this).attr "data-grid-i", i
 
     $(".grid textarea").keypress (e) ->
+      event.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if i < 15
         $(dom_grid[i+1]).focus()
       grid[i] = $(this).val() or String.fromCharCode e.which
 
     $(".grid textarea").keydown (e) ->
+      event.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if e.keyCode == 8
         if !$(this).val() and i > 0
@@ -165,3 +206,12 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
         $(cell).attr "data-multiplier", ""
       grid = {}
       multipliers = {}
+
+    $(".good-button").click next
+    $(document).keydown (e) ->
+      next() if e.keyCode == 32 and current_word?
+      false
+    $(".bad-button").click bad
+    $(document).keydown (e) ->
+      bad() if e.keyCode == 8 and current_word?
+      false
