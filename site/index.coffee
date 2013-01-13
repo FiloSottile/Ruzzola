@@ -113,7 +113,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     workers -= 1 if len == 1
     done() if workers == 0
 
-  jQuery.get "/data/it.bloom", (data) ->
+  jQuery.get "data/it.bloom", (data) ->
     bloom_data = data.split ";"
     i = 0
     bloom[n] = bloomfilter.fromBytestream b64_de bloom_data[i++] for n in [2, 3, 4, 6, 8, 10, 12]
@@ -162,7 +162,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
   bad = ->
     console.log $(".words-list li > span.word").eq(current_word).text()
-    $.get "http://api.ruzzle-map.it/bad", { word: $(".words-list li > span.word").eq(current_word).text() }
+    $.get "http://ruzzle-map.herokuapp.com/bad", { word: $(".words-list li > span.word").eq(current_word).text() }
     next()
 
 
@@ -211,9 +211,11 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
     $(".good-button").click next
     $(document).keydown (e) ->
-      next() if e.keyCode == 32 and current_word?
-      false
+      if e.keyCode == 32 and current_word?
+        next()
+        false
     $(".bad-button").click bad
     $(document).keydown (e) ->
-      bad() if e.keyCode == 8 and current_word?
-      false
+      if e.keyCode == 8 and current_word?
+        bad()
+        false
