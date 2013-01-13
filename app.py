@@ -24,7 +24,7 @@ class bad:
         bad_word = { 'word': word,
                      'ip': web.ctx.ip,
                      'time': datetime.datetime.utcnow() }
-        return web.input().get('jsoncall') + '(' + json.dumps({ 'id': db.bad.insert(bad_word) }) + ')'
+        return web.input().get('jsoncall') + '(' + json.dumps({ 'id': str(db.bad.insert(bad_word)) }) + ')'
 
 
 application = web.application(urls, globals())
