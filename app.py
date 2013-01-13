@@ -3,6 +3,7 @@ import os
 import urllib2
 from pymongo import MongoClient
 import datetime
+import json
 
 DEBUG = (os.environ.get('DEBUG') == '1')
 connection = MongoClient(os.environ['MONGOLAB_URI'])
@@ -23,7 +24,7 @@ class bad:
         bad_word = { 'word': word,
                      'ip': web.ctx.ip,
                      'time': datetime.datetime.utcnow() }
-        return db.bad.insert(bad_word)
+        return web.input().get('jsoncall') + '(' + json.dumps({ 'id': db.bad.insert(bad_word) }) + ')'
 
 
 application = web.application(urls, globals())
