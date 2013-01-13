@@ -268,8 +268,13 @@
     };
     bad = function() {
       console.log($(".words-list li > span.word").eq(current_word).text());
-      $.getJSON("http://ruzzle-map.herokuapp.com/bad", {
-        word: $(".words-list li > span.word").eq(current_word).text()
+      $.ajax({
+        url: "http://ruzzle-map.herokuapp.com/bad",
+        data: {
+          word: $(".words-list li > span.word").eq(current_word).text()
+        },
+        dataType: 'jsonp',
+        jsonp: 'jsoncall'
       });
       return next();
     };
