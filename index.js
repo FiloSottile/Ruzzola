@@ -268,7 +268,7 @@
     };
     bad = function() {
       console.log($(".words-list li > span.word").eq(current_word).text());
-      $.get("http://ruzzle-map.herokuapp.com/bad", {
+      $.getJSON("http://ruzzle-map.herokuapp.com/bad", {
         word: $(".words-list li > span.word").eq(current_word).text()
       });
       return next();
