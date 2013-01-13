@@ -150,7 +150,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     if current_word?
       $(".words-list li").eq(current_word).toggleClass "active"
       for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
-        $(".grid").eq(current_word).toggleClass path_class
+        $(".grid").toggleClass path_class
       current_word += 1
     else
       $(".good-button, .bad-button, .current-word").show()
@@ -158,10 +158,11 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     $(".words-list li").eq(current_word).toggleClass "active"
     $(".current-word").text $(".words-list li > span.word").eq(current_word).text()
     for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
-      $(".grid").eq(current_word).toggleClass path_class
+      $(".grid").toggleClass path_class
 
   bad = ->
     console.log $(".words-list li > span.word").eq(current_word).text()
+    $.get "http://api.ruzzle-map.it/bad", { word: $(".words-list li > span.word").eq(current_word).text() }
     next()
 
 
@@ -201,6 +202,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
     $(".walk").click walk
     $(".clear").click ->
+      reset()
       for cell in dom_grid
         $(cell).val('')
         $(cell).attr "data-multiplier", ""
