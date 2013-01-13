@@ -203,7 +203,7 @@
         return done();
       }
     };
-    jQuery.get("/data/it.bloom", function(data) {
+    jQuery.get("data/it.bloom", function(data) {
       var bloom_data, i, n, _i, _len, _ref;
       bloom_data = data.split(";");
       i = 0;
@@ -268,7 +268,7 @@
     };
     bad = function() {
       console.log($(".words-list li > span.word").eq(current_word).text());
-      $.get("http://api.ruzzle-map.it/bad", {
+      $.get("http://ruzzle-map.herokuapp.com/bad", {
         word: $(".words-list li > span.word").eq(current_word).text()
       });
       return next();
@@ -327,15 +327,15 @@
       $(document).keydown(function(e) {
         if (e.keyCode === 32 && (current_word != null)) {
           next();
+          return false;
         }
-        return false;
       });
       $(".bad-button").click(bad);
       return $(document).keydown(function(e) {
         if (e.keyCode === 8 && (current_word != null)) {
           bad();
+          return false;
         }
-        return false;
       });
     });
   });
