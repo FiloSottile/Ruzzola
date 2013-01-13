@@ -18,6 +18,8 @@ class bad:
         if not word:
             raise web.forbidden()
 
+        web.header('Access-Control-Allow-Origin', '*')
+
         bad_word = { 'word': word,
                      'ip': web.ctx.ip,
                      'time': datetime.datetime.utcnow() }
