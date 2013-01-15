@@ -41,7 +41,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   TW = "TW"
 
   values = {}
-  values["it"] = { a : 1, b : 5, c : 2, d : 5, e : 1, f : 5, g : 8, h : 8, i : 1, l : 3, m : 3, n : 3, o : 1, p : 5, q : 100, r : 2, s : 2, t : 2, u : 3, v : 5, z : 8 }
+  values["it"] = { a : 1, b : 5, c : 2, d : 5, e : 1, f : 5, g : 8, h : 8, i : 1, l : 3, m : 3, n : 3, o : 1, p : 5, q : 8, r : 2, s : 2, t : 2, u : 3, v : 5, z : 8 }
 
   window.bloom = {}
   bloom.ready = false
@@ -67,8 +67,6 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
 
   workers = 0
   walk = () ->
-    results = {}
-    reset()
     for pos in [0...16]
         _.defer discover, pos
         workers += 1
@@ -98,6 +96,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     sorted = _.sortBy(sorted, (x) -> x[0])
     sorted.reverse()
     populate_wordslist sorted
+    $(".grid-container > canvas").show()
     next()
 
   discover = (pos, len=0, word='', path='') ->
@@ -112,6 +111,39 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
           discover v_pos, len, word, path
     workers -= 1 if len == 1
     done() if workers == 0
+
+  draw_path = (path) ->
+    ctx = $(".grid-container > canvas")[0].getContext('2d')
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    first = true
+    for path_i in path
+      path_i = parseInt path_i, 10
+      path_x = path_i % 4
+      path_y = Math.floor path_i / 4
+      if first
+        first = false
+
+        ctx.globalAlpha = 0.7
+
+        ctx.beginPath()
+        ctx.arc(54 * path_x + 28, 54 * path_y + 28, 10, 0, 2 * Math.PI, false)
+        ctx.fillStyle = 'red'
+        ctx.fill()
+        ctx.stroke()
+
+        ctx.lineWidth = 15
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'bevel'
+        ctx.strokeStyle = 'red'
+
+        ctx.moveTo(54 * path_x + 28, 54 * path_y + 28)
+      else
+        ctx.lineTo(54 * path_x + 28, 54 * path_y + 28)
+
+    ctx.stroke()
+
+    $(ctx.canvas).show()
 
   jQuery.get "data/it.bloom", (data) ->
     bloom_data = data.split ";"
@@ -133,15 +165,21 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   reset = ->
     $(".words-list ul").html ''
     $(".good-button, .bad-button, .current-word").hide()
+    $(".grid-container > canvas").hide()
     current_word = null
+    for cell in dom_grid
+      $(cell).val('')
+      $(cell).attr "data-multiplier", ""
+    multipliers = {}
+    dom_grid = []
+    multiplier_state = null
+    grid = []
+    multipliers = {}
+    results = {}
 
   populate_wordslist = (words) ->
     for [points, path, word] in words[0..50]
-      path_class = ''
-      path_cells = path.split ' '
-      for cell_i in [0..(path_cells.length - 2)]
-        path_class += "path-#{path_cells[cell_i]}-#{path_cells[cell_i+1]} "
-      $(".words-list ul").append("""<li data-path-class="#{path_class}">
+      $(".words-list ul").append("""<li data-path="#{path}">
                                       <span class="word">#{word}</span>
                                       <span class="points">#{points}</span>
                                     </li>""")
@@ -149,16 +187,18 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
   next = ->
     if current_word?
       $(".words-list li").eq(current_word).toggleClass "active"
-      for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
-        $(".grid").toggleClass path_class
+      # for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
+      #   $(".grid").toggleClass path_class
       current_word += 1
     else
       $(".good-button, .bad-button, .current-word").show()
       current_word = 0
     $(".words-list li").eq(current_word).toggleClass "active"
     $(".current-word").text $(".words-list li > span.word").eq(current_word).text()
-    for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
-      $(".grid").toggleClass path_class
+    # for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
+    #   $(".grid").toggleClass path_class
+    draw_path $(".words-list li").eq(current_word).attr('data-path').split(' ')
+
 
   bad = ->
     console.log $(".words-list li > span.word").eq(current_word).text()
@@ -201,13 +241,7 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
         $(this).blur()
 
     $(".walk").click walk
-    $(".clear").click ->
-      reset()
-      for cell in dom_grid
-        $(cell).val('')
-        $(cell).attr "data-multiplier", ""
-      grid = {}
-      multipliers = {}
+    $(".clear").click reset
 
     $(".good-button").click next
     $(document).keydown (e) ->
@@ -219,3 +253,9 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
       if e.keyCode == 8 and current_word?
         bad()
         false
+
+    grid_size = $(".grid-container").width()
+    canvas = $(".grid-container > canvas")
+    canvas.css('width', grid_size + 'px').css('height', grid_size + 'px')
+    canvas.attr('width', grid_size).attr('height', grid_size)
+

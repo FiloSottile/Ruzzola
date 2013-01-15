@@ -40,7 +40,7 @@
             CHEAT LOGIC
     */
 
-    var DL, DW, TL, TW, bad, calc_points, current_word, discover, dom_grid, done, found, grid, multiplier_state, multipliers, next, populate_wordslist, reset, results, values, vicini, walk, workers;
+    var DL, DW, TL, TW, bad, calc_points, current_word, discover, dom_grid, done, draw_path, found, grid, multiplier_state, multipliers, next, populate_wordslist, reset, results, values, vicini, walk, workers;
     DL = "DL";
     TL = "TL";
     DW = "DW";
@@ -61,7 +61,7 @@
       n: 3,
       o: 1,
       p: 5,
-      q: 100,
+      q: 8,
       r: 2,
       s: 2,
       t: 2,
@@ -103,8 +103,6 @@
     workers = 0;
     walk = function() {
       var pos, _i, _results;
-      results = {};
-      reset();
       _results = [];
       for (pos = _i = 0; _i < 16; pos = ++_i) {
         _.defer(discover, pos);
@@ -167,6 +165,7 @@
       });
       sorted.reverse();
       populate_wordslist(sorted);
+      $(".grid-container > canvas").show();
       return next();
     };
     discover = function(pos, len, word, path) {
@@ -203,6 +202,36 @@
         return done();
       }
     };
+    draw_path = function(path) {
+      var ctx, first, path_i, path_x, path_y, _i, _len;
+      ctx = $(".grid-container > canvas")[0].getContext('2d');
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      first = true;
+      for (_i = 0, _len = path.length; _i < _len; _i++) {
+        path_i = path[_i];
+        path_i = parseInt(path_i, 10);
+        path_x = path_i % 4;
+        path_y = Math.floor(path_i / 4);
+        if (first) {
+          first = false;
+          ctx.globalAlpha = 0.7;
+          ctx.beginPath();
+          ctx.arc(54 * path_x + 28, 54 * path_y + 28, 10, 0, 2 * Math.PI, false);
+          ctx.fillStyle = 'red';
+          ctx.fill();
+          ctx.stroke();
+          ctx.lineWidth = 15;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'bevel';
+          ctx.strokeStyle = 'red';
+          ctx.moveTo(54 * path_x + 28, 54 * path_y + 28);
+        } else {
+          ctx.lineTo(54 * path_x + 28, 54 * path_y + 28);
+        }
+      }
+      ctx.stroke();
+      return $(ctx.canvas).show();
+    };
     jQuery.get("data/it.bloom", function(data) {
       var bloom_data, i, n, _i, _len, _ref;
       bloom_data = data.split(";");
@@ -223,34 +252,36 @@
     multiplier_state = null;
     current_word = null;
     reset = function() {
+      var cell, _i, _len;
       $(".words-list ul").html('');
       $(".good-button, .bad-button, .current-word").hide();
-      return current_word = null;
+      $(".grid-container > canvas").hide();
+      current_word = null;
+      for (_i = 0, _len = dom_grid.length; _i < _len; _i++) {
+        cell = dom_grid[_i];
+        $(cell).val('');
+        $(cell).attr("data-multiplier", "");
+      }
+      multipliers = {};
+      dom_grid = [];
+      multiplier_state = null;
+      grid = [];
+      multipliers = {};
+      return results = {};
     };
     populate_wordslist = function(words) {
-      var cell_i, path, path_cells, path_class, points, word, _i, _j, _len, _ref, _ref1, _ref2, _results;
+      var path, points, word, _i, _len, _ref, _ref1, _results;
       _ref = words.slice(0, 51);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         _ref1 = _ref[_i], points = _ref1[0], path = _ref1[1], word = _ref1[2];
-        path_class = '';
-        path_cells = path.split(' ');
-        for (cell_i = _j = 0, _ref2 = path_cells.length - 2; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; cell_i = 0 <= _ref2 ? ++_j : --_j) {
-          path_class += "path-" + path_cells[cell_i] + "-" + path_cells[cell_i + 1] + " ";
-        }
-        _results.push($(".words-list ul").append("<li data-path-class=\"" + path_class + "\">\n  <span class=\"word\">" + word + "</span>\n  <span class=\"points\">" + points + "</span>\n</li>"));
+        _results.push($(".words-list ul").append("<li data-path=\"" + path + "\">\n  <span class=\"word\">" + word + "</span>\n  <span class=\"points\">" + points + "</span>\n</li>"));
       }
       return _results;
     };
     next = function() {
-      var path_class, _i, _j, _len, _len1, _ref, _ref1, _results;
       if (current_word != null) {
         $(".words-list li").eq(current_word).toggleClass("active");
-        _ref = $(".words-list li").eq(current_word).attr('data-path-class').split(' ');
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          path_class = _ref[_i];
-          $(".grid").toggleClass(path_class);
-        }
         current_word += 1;
       } else {
         $(".good-button, .bad-button, .current-word").show();
@@ -258,13 +289,7 @@
       }
       $(".words-list li").eq(current_word).toggleClass("active");
       $(".current-word").text($(".words-list li > span.word").eq(current_word).text());
-      _ref1 = $(".words-list li").eq(current_word).attr('data-path-class').split(' ');
-      _results = [];
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        path_class = _ref1[_j];
-        _results.push($(".grid").toggleClass(path_class));
-      }
-      return _results;
+      return draw_path($(".words-list li").eq(current_word).attr('data-path').split(' '));
     };
     bad = function() {
       console.log($(".words-list li > span.word").eq(current_word).text());
@@ -279,6 +304,7 @@
       return next();
     };
     return jQuery(document).ready(function() {
+      var canvas, grid_size;
       reset();
       $(".grid textarea").each(function(i) {
         dom_grid[i] = this;
@@ -317,17 +343,7 @@
         }
       });
       $(".walk").click(walk);
-      $(".clear").click(function() {
-        var cell, _i, _len;
-        reset();
-        for (_i = 0, _len = dom_grid.length; _i < _len; _i++) {
-          cell = dom_grid[_i];
-          $(cell).val('');
-          $(cell).attr("data-multiplier", "");
-        }
-        grid = {};
-        return multipliers = {};
-      });
+      $(".clear").click(reset);
       $(".good-button").click(next);
       $(document).keydown(function(e) {
         if (e.keyCode === 32 && (current_word != null)) {
@@ -336,12 +352,16 @@
         }
       });
       $(".bad-button").click(bad);
-      return $(document).keydown(function(e) {
+      $(document).keydown(function(e) {
         if (e.keyCode === 8 && (current_word != null)) {
           bad();
           return false;
         }
       });
+      grid_size = $(".grid-container").width();
+      canvas = $(".grid-container > canvas");
+      canvas.css('width', grid_size + 'px').css('height', grid_size + 'px');
+      return canvas.attr('width', grid_size).attr('height', grid_size);
     });
   });
 
