@@ -166,11 +166,11 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
     $(".good-button, .bad-button, .current-word").hide()
     $(".grid-container > canvas").hide()
     current_word = null
+    console.log dom_grid
     for cell in dom_grid
       $(cell).val('')
       $(cell).attr "data-multiplier", ""
     multipliers = {}
-    dom_grid = []
     multiplier_state = null
     grid = []
     multipliers = {}

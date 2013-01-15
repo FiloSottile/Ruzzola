@@ -256,13 +256,13 @@
       $(".good-button, .bad-button, .current-word").hide();
       $(".grid-container > canvas").hide();
       current_word = null;
+      console.log(dom_grid);
       for (_i = 0, _len = dom_grid.length; _i < _len; _i++) {
         cell = dom_grid[_i];
         $(cell).val('');
         $(cell).attr("data-multiplier", "");
       }
       multipliers = {};
-      dom_grid = [];
       multiplier_state = null;
       grid = [];
       multipliers = {};
