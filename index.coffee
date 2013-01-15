@@ -213,19 +213,27 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
       $(this).attr "data-grid-i", i
 
     $(".grid textarea").keypress (e) ->
-      e.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if i < 15
         $(dom_grid[i+1]).focus()
       grid[i] = $(this).val() or String.fromCharCode e.which
 
+    multiplier_numbers =
+      49: DL
+      50: TL
+      51: DW
+      52: TW
     $(".grid textarea").keydown (e) ->
-      e.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if e.keyCode == 8
+        e.stopPropagation()
         if !$(this).val() and i > 0
           $(dom_grid[i-1]).focus()
-
+      if e.keyCode of multiplier_numbers
+        multipliers[i] = multiplier_numbers[e.keyCode]
+        $(this).attr "data-multiplier", multiplier_numbers[e.keyCode]
+        e.stopPropagation()
+        false
 
     $(".multipliers td").click ->
       multiplier_state = $(this).attr "data-multiplier"

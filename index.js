@@ -303,7 +303,7 @@
       return next();
     };
     return jQuery(document).ready(function() {
-      var canvas, grid_size;
+      var canvas, grid_size, multiplier_numbers;
       reset();
       $(".grid textarea").each(function(i) {
         dom_grid[i] = this;
@@ -311,21 +311,32 @@
       });
       $(".grid textarea").keypress(function(e) {
         var i;
-        e.stopPropagation();
         i = parseInt($(this).attr("data-grid-i"), 10);
         if (i < 15) {
           $(dom_grid[i + 1]).focus();
         }
         return grid[i] = $(this).val() || String.fromCharCode(e.which);
       });
+      multiplier_numbers = {
+        49: DL,
+        50: TL,
+        51: DW,
+        52: TW
+      };
       $(".grid textarea").keydown(function(e) {
         var i;
-        e.stopPropagation();
         i = parseInt($(this).attr("data-grid-i"), 10);
         if (e.keyCode === 8) {
+          e.stopPropagation();
           if (!$(this).val() && i > 0) {
-            return $(dom_grid[i - 1]).focus();
+            $(dom_grid[i - 1]).focus();
           }
+        }
+        if (e.keyCode in multiplier_numbers) {
+          multipliers[i] = multiplier_numbers[e.keyCode];
+          $(this).attr("data-multiplier", multiplier_numbers[e.keyCode]);
+          e.stopPropagation();
+          return false;
         }
       });
       $(".multipliers td").click(function() {
