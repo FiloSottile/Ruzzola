@@ -219,7 +219,6 @@
           ctx.arc(54 * path_x + 28, 54 * path_y + 28, 10, 0, 2 * Math.PI, false);
           ctx.fillStyle = 'red';
           ctx.fill();
-          ctx.stroke();
           ctx.lineWidth = 15;
           ctx.lineCap = 'round';
           ctx.lineJoin = 'bevel';
@@ -312,7 +311,7 @@
       });
       $(".grid textarea").keypress(function(e) {
         var i;
-        event.stopPropagation();
+        e.stopPropagation();
         i = parseInt($(this).attr("data-grid-i"), 10);
         if (i < 15) {
           $(dom_grid[i + 1]).focus();
@@ -321,7 +320,7 @@
       });
       $(".grid textarea").keydown(function(e) {
         var i;
-        event.stopPropagation();
+        e.stopPropagation();
         i = parseInt($(this).attr("data-grid-i"), 10);
         if (e.keyCode === 8) {
           if (!$(this).val() && i > 0) {

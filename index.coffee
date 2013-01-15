@@ -130,7 +130,6 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
         ctx.arc(54 * path_x + 28, 54 * path_y + 28, 10, 0, 2 * Math.PI, false)
         ctx.fillStyle = 'red'
         ctx.fill()
-        ctx.stroke()
 
         ctx.lineWidth = 15
         ctx.lineCap = 'round'
@@ -214,14 +213,14 @@ require ["bloomfilter", "jquery", "underscore"], (bloomfilter, $) ->
       $(this).attr "data-grid-i", i
 
     $(".grid textarea").keypress (e) ->
-      event.stopPropagation()
+      e.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if i < 15
         $(dom_grid[i+1]).focus()
       grid[i] = $(this).val() or String.fromCharCode e.which
 
     $(".grid textarea").keydown (e) ->
-      event.stopPropagation()
+      e.stopPropagation()
       i = parseInt $(this).attr("data-grid-i"), 10
       if e.keyCode == 8
         if !$(this).val() and i > 0

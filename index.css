@@ -31,6 +31,9 @@
   text-align: center;
   text-transform: uppercase;
 }
+.multipliers {
+  margin-bottom: 50px;
+}
 .multipliers td {
   border: 1px solid black;
   width: 50px;
@@ -42,7 +45,6 @@
   -moz-border-radius: 25px;
   border-radius: 25px;
   font-family: sans-serif;
-  margin-bottom: 50px;
   cursor: pointer;
 }
 .multipliers td.reset {
