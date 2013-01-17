@@ -129,10 +129,10 @@
       type = multipliers[pos];
       if (path.split(' ').indexOf(pos) !== -1) {
         if (type === DL) {
-          res += values["it"][grid[pos]];
+          res += values["it"][grid[pos].toLowerCase()];
         }
         if (type === TL) {
-          res += 2 * values["it"][grid[pos]];
+          res += 2 * values["it"][grid[pos].toLowerCase()];
         }
         if (type === DW) {
           mul *= 2;
@@ -191,7 +191,7 @@
     }
     len++;
     path += " " + pos;
-    word += grid[pos];
+    word += grid[pos].toLowerCase();
     _ref = bloom.test(word), go = _ref[0], is_word = _ref[1];
     if (is_word) {
       found(word, path.trim());

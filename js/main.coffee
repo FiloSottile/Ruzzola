@@ -69,8 +69,8 @@ calc_points = (word, path) ->
   mul = 1
   for own pos, type of multipliers
     if path.split(' ').indexOf(pos) != -1
-      res += values["it"][grid[pos]] if type == DL
-      res += 2 * values["it"][grid[pos]] if type == TL
+      res += values["it"][grid[pos].toLowerCase()] if type == DL
+      res += 2 * values["it"][grid[pos].toLowerCase()] if type == TL
       mul *= 2 if type == DW
       mul *= 3 if type == TW
   res *= mul
@@ -93,7 +93,7 @@ done = ->
 discover = (pos, len=0, word='', path='') ->
   len++
   path += " #{pos}"
-  word += grid[pos]
+  word += grid[pos].toLowerCase()
   [go, is_word] = bloom.test word
   found word, path.trim() if is_word
   if go
