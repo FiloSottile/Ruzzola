@@ -214,7 +214,11 @@
   };
 
   draw_path = function(path) {
-    var ctx, first, path_i, path_x, path_y, _i, _len;
+    var cell_spacing, cell_width, ctx, first, jump, path_i, path_x, path_y, start, _i, _len;
+    cell_width = $(".grid td").width();
+    cell_spacing = parseInt($(".grid").css("border-spacing"), 10);
+    jump = cell_width + cell_spacing + 2;
+    start = cell_width / 2 + cell_spacing + 1;
     ctx = $(".grid-container > canvas")[0].getContext('2d');
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     first = true;
@@ -227,16 +231,16 @@
         first = false;
         ctx.globalAlpha = 0.7;
         ctx.beginPath();
-        ctx.arc(54 * path_x + 28, 54 * path_y + 28, 10, 0, 2 * Math.PI, false);
+        ctx.arc(jump * path_x + start, jump * path_y + start, 10, 0, 2 * Math.PI, false);
         ctx.fillStyle = 'red';
         ctx.fill();
         ctx.lineWidth = 15;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'bevel';
         ctx.strokeStyle = 'red';
-        ctx.moveTo(54 * path_x + 28, 54 * path_y + 28);
+        ctx.moveTo(jump * path_x + start, jump * path_y + start);
       } else {
-        ctx.lineTo(54 * path_x + 28, 54 * path_y + 28);
+        ctx.lineTo(jump * path_x + start, jump * path_y + start);
       }
     }
     ctx.stroke();
