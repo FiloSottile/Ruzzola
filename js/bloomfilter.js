@@ -27,8 +27,6 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-define(function(require, exports, module) {
-
 (function(exports) {
   exports.BloomFilter = BloomFilter;
   exports.fromBytestream = fromBytestream;
@@ -195,5 +193,3 @@ define(function(require, exports, module) {
     return a & 0xffffffff;
   }
 })(typeof exports !== "undefined" ? exports : this);
-
-});
