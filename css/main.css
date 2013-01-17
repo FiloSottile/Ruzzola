@@ -4,14 +4,17 @@
   margin: 0 auto;
 }
 .grid-container {
+  background-image: url("../img/pergamena.png");
   position: relative;
-  width: 218px;
+  width: 325px;
   margin-bottom: 20px;
+  height: 370px;
+  padding: 130px 0 0 75px;
 }
 .grid-container canvas {
   position: absolute;
-  width: 218px;
-  height: 218px;
+  width: 258px;
+  height: 258px;
   display: none;
 }
 .grid {
@@ -20,20 +23,21 @@
 }
 .grid td {
   border: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   line-height: 0;
 }
 .grid td textarea {
+  background-color: #ffe65d;
   padding: 0;
   margin: 0;
   border: 0;
   resize: none;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-  font-size: 40px;
+  height: 60px;
+  width: 60px;
+  line-height: 60px;
+  font-size: 50px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -56,17 +60,21 @@
 .multipliers td.reset {
   padding: 0 8px;
 }
-[data-multiplier=DL] {
+.grid td textarea[data-multiplier=DL],
+.multipliers td[data-multiplier=DL] {
   background-color: lightgreen;
 }
-[data-multiplier=TL] {
+.grid td textarea[data-multiplier=TL],
+.multipliers td[data-multiplier=TL] {
   background-color: lightblue;
 }
-[data-multiplier=DW] {
+.grid td textarea[data-multiplier=DW],
+.multipliers td[data-multiplier=DW] {
   background-color: yellow;
 }
-[data-multiplier=TW] {
-  background-color: pink;
+.grid td textarea[data-multiplier=TW],
+.multipliers td[data-multiplier=TW] {
+  background-color: red;
 }
 .words-list {
   float: right;

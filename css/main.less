@@ -1,8 +1,9 @@
 @import "boilerplate.css";
 
-@cell-width: 50px;
+@cell-width: 60px;
 @cell-spacing: 2px;
 @grid-width: (@cell-width + 2) * 4 + @cell-spacing * 5;
+@colore-pergamena: #edd249;
 
 .container {
 	width: 960px;
@@ -10,9 +11,12 @@
 }
 
 .grid-container {
+	background-image: url("../img/pergamena.png");
 	position: relative;
-	width: @grid-width;
+	width: 400px - 75;
 	margin-bottom: 20px;
+	height: 500px - 130;
+	padding: 130px 0 0 75px;
 	canvas {
 		position: absolute;
 		width: @grid-width;
@@ -33,6 +37,7 @@
 	padding: 0;
 	line-height: 0;
 	textarea {
+		background-color: @colore-pergamena + 20;
 		padding: 0;
 		margin: 0;
 		border: 0;
@@ -40,7 +45,7 @@
 		height: @cell-width;
 		width: @cell-width;
 		line-height: @cell-width;
-		font-size: 40px;
+		font-size: @cell-width - 10;
 		text-align: center;
 		text-transform: uppercase;
 	}
@@ -66,17 +71,17 @@
 	}
 }
 
-[data-multiplier=DL],  {
+.grid td textarea[data-multiplier=DL], .multipliers td[data-multiplier=DL] {
 	background-color: lightgreen;
 }
-[data-multiplier=TL] {
+.grid td textarea[data-multiplier=TL], .multipliers td[data-multiplier=TL] {
 	background-color: lightblue;
 }
-[data-multiplier=DW] {
+.grid td textarea[data-multiplier=DW], .multipliers td[data-multiplier=DW] {
 	background-color: yellow;
 }
-[data-multiplier=TW] {
-	background-color: pink;
+.grid td textarea[data-multiplier=TW], .multipliers td[data-multiplier=TW] {
+	background-color: red;
 }
 
 .words-list {
