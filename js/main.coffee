@@ -192,6 +192,8 @@ next = ->
   # for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
   #   $(".grid").toggleClass path_class
   draw_path $(".words-list li").eq(current_word).attr('data-path').split(' ')
+  if current_word > 2
+    $(".words-list").scrollTop(46 * (current_word - 2))
 
 
 bad = ->

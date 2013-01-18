@@ -310,7 +310,10 @@
     }
     $(".words-list li").eq(current_word).toggleClass("active");
     $(".current-word").text($(".words-list li > span.word").eq(current_word).text());
-    return draw_path($(".words-list li").eq(current_word).attr('data-path').split(' '));
+    draw_path($(".words-list li").eq(current_word).attr('data-path').split(' '));
+    if (current_word > 2) {
+      return $(".words-list").scrollTop(46 * (current_word - 2));
+    }
   };
 
   bad = function() {
