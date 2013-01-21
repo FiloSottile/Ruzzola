@@ -60,6 +60,11 @@ section.bottom .current-info h3 {
 .state-playing section.bottom {
   display: block;
 }
+.foot {
+  color: grey;
+  font-size: 12px;
+  margin-top: 10px;
+}
 article {
   height: 600px;
 }
