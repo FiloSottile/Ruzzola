@@ -1,13 +1,101 @@
-@import "boilerplate.css";
+/*@import "boilerplate.css";*/
 
 @cell-width: 60px;
 @cell-spacing: 2px;
 @grid-width: (@cell-width + 2) * 4 + @cell-spacing * 5;
 @colore-pergamena: #edd249;
 
-.container {
-	width: 960px;
+body {
+    font: 16px/26px Helvetica, Helvetica Neue, Arial;
+}
+
+.column-wrapper {
+	overflow: hidden;
 	margin: 0 auto;
+	width: 900px;
+}
+
+.column-container {
+	margin: 0 20px;
+	box-shadow: 0 0 20px gray;
+	padding: 30px;
+}
+
+.wide-container {
+	border-top: 1px solid grey;
+	border-bottom: 1px solid grey;
+	> div {
+		width: 800px;
+		margin: 0 auto;
+		padding: 30px;
+		text-align: center;
+	}
+}
+
+
+// *************** HEADER ****************
+
+header.column-container {
+	padding: 70px 30px 20px;
+	h1 {
+		margin: 0;
+		font-size: 50px;
+		line-height: 60px;
+		display: inline-block;
+	}
+	h3 {
+		display: inline-block;
+		margin: 0 0 0 20px;
+	}
+}
+
+
+// *************** WIDE BOTTOM ****************
+
+section.bottom {
+	display: none;
+	.good-button, .bad-button {
+		width: 150px;
+		height: 40px;
+	}
+	.good-button {
+		float: right;
+	}
+	.bad-button {
+		float: left;
+	}
+	.current-info {
+		width: 300px;
+		display: inline-block;
+		h1, h3 {
+			margin: 0;
+		}
+	}
+}
+.state-playing section.bottom {
+	display: block;
+}
+
+
+// *************** MAIN ****************
+
+article {
+	height: 600px;
+
+	.ad-skyscraper {
+		float: left;
+	}
+
+	.right-skyscraper {
+		float: right;
+		width: 170px;
+	}
+
+	.grid-skyscraper {
+		float: left;
+		margin: 0 30px;
+	}
+
 }
 
 .grid-container {
@@ -23,71 +111,76 @@
 		height: @grid-width;
 		display: none;
 	}
+	.grid {
+		border-collapse: separate;
+		border-spacing: @cell-spacing;
+		td {
+			border: 1px solid black;
+			width: @cell-width;
+			height: @cell-width;
+			padding: 0;
+			line-height: 0;
+			textarea {
+				background-color: @colore-pergamena + 20;
+				padding: 0;
+				margin: 0;
+				border: 0;
+				resize: none;
+				height: @cell-width;
+				width: @cell-width;
+				line-height: @cell-width;
+				font-size: @cell-width - 10;
+				text-align: center;
+				text-transform: uppercase;
+			}
+		}
+	}
 }
 
-.grid {
-	border-collapse: separate;
-	border-spacing: @cell-spacing;
-}
-
-.grid td {
-	border: 1px solid black;
-	width: @cell-width;
-	height: @cell-width;
-	padding: 0;
-	line-height: 0;
-	textarea {
-		background-color: @colore-pergamena + 20;
-		padding: 0;
-		margin: 0;
-		border: 0;
-		resize: none;
-		height: @cell-width;
-		width: @cell-width;
-		line-height: @cell-width;
-		font-size: @cell-width - 10;
-		text-align: center;
-		text-transform: uppercase;
+.state-playing {
+	canvas {
+		display: block;
 	}
 }
 
 .multipliers {
-	margin-bottom: 50px;
-}
-.multipliers td {
-	border: 1px solid black;
-	width: 50px;
-	height: 50px;
-	padding: 0;
-	text-align: center;
-	font-size: 25px;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	border-radius: 25px;
-	font-family: sans-serif;
-	cursor: pointer;
-	&.reset {
-		padding: 0 8px;
+	margin: 0 auto;
+	border-collapse: separate;
+	border-spacing: 20px;
+	td {
+		width: 50px;
+		height: 50px;
+		padding: 0;
+		text-align: center;
+		font-size: 25px;
+		-webkit-border-radius: 25px;
+		-moz-border-radius: 25px;
+		border-radius: 25px;
+		font-family: sans-serif;
+		cursor: pointer;
 	}
 }
 
 .grid td textarea[data-multiplier=DL], .multipliers td[data-multiplier=DL] {
-	background-color: lightgreen;
+	background-color: #12af16;
 }
 .grid td textarea[data-multiplier=TL], .multipliers td[data-multiplier=TL] {
-	background-color: lightblue;
+	background-color: #007bd3;
 }
 .grid td textarea[data-multiplier=DW], .multipliers td[data-multiplier=DW] {
-	background-color: yellow;
+	background-color: #fece2c;
 }
 .grid td textarea[data-multiplier=TW], .multipliers td[data-multiplier=TW] {
-	background-color: red;
+	background-color: #ed0408;
+}
+.multipliers td.reset {
+	background-color: #CCC;
 }
 
 .words-list {
-	float: right;
-	height: 500px;
+	height: 465px;
 	overflow: scroll;
+	margin-bottom: 20px;
 	ul {
 		padding: 0;
 		margin: 0;
@@ -108,4 +201,13 @@
 	li.active {
 		background-color: @colore-pergamena + 20;
 	}
+}
+
+.clear, .walk {
+	width: 100%;
+	height: 40px;
+	margin-bottom: 10px;
+}
+.clear {
+	margin-top: 25px;
 }

@@ -20,70 +20,74 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="header-container">
-            <header class="wrapper clearfix">
-                <h1 class="title">Ruzzle Map</h1>
-                <nav>
-                    <ul>
-                        <li><a href="#">nav ul li a</a></li>
-                        <li><a href="#">nav ul li a</a></li>
-                        <li><a href="#">nav ul li a</a></li>
-                    </ul>
-                </nav>
-            </header>
-        </div>
+        <div class="column-wrapper"><header class="column-container">
+            <h1>Ruzzle Map</h1>
+            <h3>by Filippo Valsorda</h3>
+        </header></div>
 
-        <div class="main-container">
-            <div class="main wrapper clearfix">
+        <section class="wide-container top">
+            <div>
+                Benvenuto! Usare questo sito è semplice:
+            </div>
+        </section>
 
-                <article>
-                    <header>
-                        <h1>article header h1</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec.</p>
-                    </header>
-                    <section>
-                        <div class="words-list">
-                            <ul></ul>
-                        </div>
-                        
-                        <div class="grid-container">
-                            <canvas></canvas>
-                            <table class="grid">
-                                <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
-                                <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
-                                <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
-                                <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
-                            </table>
-                        </div>
+        <div class="column-wrapper"><article class="column-container">
 
-                        <table class="multipliers">
-                            <tr><td data-multiplier="DL">DL</td><td data-multiplier="TL">TL</td><td data-multiplier="DW">DW</td><td data-multiplier="TW">TW</td><td class="reset" data-multiplier="">None</td></tr>
-                        </table>
+            <div class="ad-skyscraper" style="width: 160px; height: 600px; border: 1px solid black;"></div>
 
-                        <button class="clear">Clear</button><button class="walk">GO</button>
+            <div class="grid-skyscraper">
+                <div class="grid-container">
+                    <canvas></canvas>
+                    <table class="grid">
+                        <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
+                        <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
+                        <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
+                        <tr><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td><td><textarea maxlength="1"></textarea></td></tr>
+                    </table>
+                </div>
 
-                        <h1 class="current-word"></h1>
-                        <button class="good-button">GOOD</button><button class="bad-button">Bad!</button>
-                    </section>
-                    <footer>
-                        <h3>article footer h3</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor.</p>
-                    </footer>
-                </article>
+                <table class="multipliers">
+                    <tr><td data-multiplier="DL">DL</td><td data-multiplier="TL">TL</td><td data-multiplier="DW">DW</td><td data-multiplier="TW">TW</td><td class="reset" data-multiplier="">No</td></tr>
+                </table>
+            </div>
 
-                <aside>
-                    <h3>aside</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices.</p>
-                </aside>
+            <div class="right-skyscraper">
+                <div class="words-list">
+                    <ul></ul>
+                </div>
 
-            </div> <!-- #main -->
-        </div> <!-- #main-container -->
+                <button class="clear">Clear</button>
+                <button class="walk">GO</button>
+            </div>
 
-        <div class="footer-container">
-            <footer class="wrapper">
-                <h3>footer</h3>
-            </footer>
-        </div>
+        </article></div>
+
+        <section class="wide-container bottom">
+            <div>
+                <button class="bad-button">Bad!</button>
+                <button class="good-button">GOOD</button>
+                <div class="current-info">
+                    <h1 class="current-word">PAROLA</h1>
+                    <h3 class="current-points">666</h3>
+                </div>
+            </div>
+        </section>
+
+        <div class="column-wrapper"><footer class="column-container">
+            <h1>Commenti</h1>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                var disqus_shortname = 'ruzzlemap'; // required: replace example with your forum shortname
+
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        </footer></div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>

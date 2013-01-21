@@ -87,7 +87,7 @@ done = ->
   sorted = _.sortBy(sorted, (x) -> x[0])
   sorted.reverse()
   populate_wordslist sorted
-  $(".grid-container > canvas").show()
+  $("html").removeClass("state-ready").addClass("state-playing")
   next()
 
 discover = (pos, len=0, word='', path='') ->
@@ -138,8 +138,6 @@ draw_path = (path) ->
 
   ctx.stroke()
 
-  $(ctx.canvas).show()
-
 jQuery.get "data/it.bloom", (data) ->
   bloom_data = data.split ";"
   i = 0
@@ -159,8 +157,7 @@ current_word = null
 
 reset = ->
   $(".words-list ul").html ''
-  $(".good-button, .bad-button, .current-word").hide()
-  $(".grid-container > canvas").hide()
+  $("html").removeClass("state-playing").addClass("state-ready")
   current_word = null
   for cell in dom_grid
     $(cell).val('')
@@ -185,10 +182,10 @@ next = ->
     #   $(".grid").toggleClass path_class
     current_word += 1
   else
-    $(".good-button, .bad-button, .current-word").show()
     current_word = 0
   $(".words-list li").eq(current_word).toggleClass "active"
   $(".current-word").text $(".words-list li > span.word").eq(current_word).text()
+  $(".current-points").text $(".words-list li > span.points").eq(current_word).text()
   # for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
   #   $(".grid").toggleClass path_class
   draw_path $(".words-list li").eq(current_word).attr('data-path').split(' ')

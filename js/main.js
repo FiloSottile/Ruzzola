@@ -174,7 +174,7 @@
     });
     sorted.reverse();
     populate_wordslist(sorted);
-    $(".grid-container > canvas").show();
+    $("html").removeClass("state-ready").addClass("state-playing");
     return next();
   };
 
@@ -243,8 +243,7 @@
         ctx.lineTo(jump * path_x + start, jump * path_y + start);
       }
     }
-    ctx.stroke();
-    return $(ctx.canvas).show();
+    return ctx.stroke();
   };
 
   jQuery.get("data/it.bloom", function(data) {
@@ -274,8 +273,7 @@
   reset = function() {
     var cell, _i, _len;
     $(".words-list ul").html('');
-    $(".good-button, .bad-button, .current-word").hide();
-    $(".grid-container > canvas").hide();
+    $("html").removeClass("state-playing").addClass("state-ready");
     current_word = null;
     for (_i = 0, _len = dom_grid.length; _i < _len; _i++) {
       cell = dom_grid[_i];
@@ -305,11 +303,11 @@
       $(".words-list li").eq(current_word).toggleClass("active");
       current_word += 1;
     } else {
-      $(".good-button, .bad-button, .current-word").show();
       current_word = 0;
     }
     $(".words-list li").eq(current_word).toggleClass("active");
     $(".current-word").text($(".words-list li > span.word").eq(current_word).text());
+    $(".current-points").text($(".words-list li > span.points").eq(current_word).text());
     draw_path($(".words-list li").eq(current_word).attr('data-path').split(' '));
     if (current_word > 2) {
       return $(".words-list").scrollTop(46 * (current_word - 2));
