@@ -40,25 +40,11 @@ section.bottom {
 }
 section.bottom .good-button,
 section.bottom .bad-button {
-  width: 150px;
-  height: 40px;
+  width: 250px;
+  height: 50px;
 }
 section.bottom .good-button {
-  float: right;
-}
-section.bottom .bad-button {
-  float: left;
-}
-section.bottom .current-info {
-  width: 300px;
-  display: inline-block;
-}
-section.bottom .current-info h1,
-section.bottom .current-info h3 {
-  margin: 0;
-}
-.state-playing section.bottom {
-  display: block;
+  margin-left: 160px;
 }
 .foot {
   color: grey;
@@ -117,9 +103,6 @@ article .grid-skyscraper {
   text-align: center;
   text-transform: uppercase;
 }
-.state-playing canvas {
-  display: block;
-}
 .multipliers {
   margin: 0 auto;
   border-collapse: separate;
@@ -156,10 +139,23 @@ article .grid-skyscraper {
 .multipliers td.reset {
   background-color: #CCC;
 }
+.current-info {
+  text-align: center;
+  margin: 0 auto;
+}
+.current-info h1,
+.current-info h3 {
+  margin: 0;
+}
+.current-info h1 {
+  font-size: 4em;
+  line-height: 1em;
+  text-transform: uppercase;
+}
 .words-list {
   height: 465px;
   overflow: scroll;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .words-list ul {
   padding: 0;
@@ -189,4 +185,16 @@ article .grid-skyscraper {
 }
 .clear {
   margin-top: 25px;
+}
+.state-playing .multipliers {
+  display: none;
+}
+.state-playing section.bottom {
+  display: block;
+}
+.state-playing canvas {
+  display: block;
+}
+.state-ready .current-info {
+  display: none;
 }

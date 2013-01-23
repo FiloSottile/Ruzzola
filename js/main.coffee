@@ -198,6 +198,10 @@ bad = ->
   $.ajax({ url: "http://ruzzle-map.herokuapp.com/bad", data: { word: $(".words-list li > span.word").eq(current_word).text() }, dataType: 'jsonp', jsonp: 'jsoncall' })
   next()
 
+go = ->
+  $('textarea').blur()
+  walk()
+
 
 jQuery(document).ready ->
   reset()
@@ -241,8 +245,12 @@ jQuery(document).ready ->
       multiplier_state = null
       $(this).blur()
 
-  $(".walk").click walk
+  $(".walk").click go
   $(".clear").click reset
+  $(document).keydown (e) ->
+    if e.keyCode == 13 and !current_word?
+      go()
+      false
 
   $(".good-button").click next
   $(document).keydown (e) ->

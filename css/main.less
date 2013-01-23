@@ -55,25 +55,12 @@ header.column-container {
 section.bottom {
 	display: none;
 	.good-button, .bad-button {
-		width: 150px;
-		height: 40px;
+		width: 250px;
+		height: 50px;
 	}
 	.good-button {
-		float: right;
+		margin-left: 160px;
 	}
-	.bad-button {
-		float: left;
-	}
-	.current-info {
-		width: 300px;
-		display: inline-block;
-		h1, h3 {
-			margin: 0;
-		}
-	}
-}
-.state-playing section.bottom {
-	display: block;
 }
 
 
@@ -145,12 +132,6 @@ article {
 	}
 }
 
-.state-playing {
-	canvas {
-		display: block;
-	}
-}
-
 .multipliers {
 	margin: 0 auto;
 	border-collapse: separate;
@@ -185,10 +166,25 @@ article {
 	background-color: #CCC;
 }
 
+.current-info {
+	text-align: center;
+	margin: 0 auto;
+	h1, h3 {
+		margin: 0;
+	}
+	h1 {
+		font-size: 4em;
+		line-height: 1em;
+		text-transform: uppercase;
+	}
+}
+
+
+
 .words-list {
 	height: 465px;
 	overflow: scroll;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	ul {
 		padding: 0;
 		margin: 0;
@@ -218,4 +214,17 @@ article {
 }
 .clear {
 	margin-top: 25px;
+}
+
+
+// ************************* STATES ****************************
+
+.state-playing {
+	.multipliers { display: none; }
+	section.bottom { display: block; }
+	canvas { display: block; }
+}
+
+.state-ready {
+	.current-info { display: none; }
 }
