@@ -35,21 +35,31 @@ header.column-container h3 {
   display: inline-block;
   margin: 0 0 0 20px;
 }
+header.column-container .ad-leaderboard-top {
+  margin: 20px auto 0;
+  display: none;
+}
 section.bottom {
   display: none;
 }
 section.bottom .good-button,
 section.bottom .bad-button {
   width: 250px;
-  height: 50px;
+  height: 60px;
 }
-section.bottom .good-button {
-  margin-left: 160px;
+section.bottom .ad-banner {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 10px;
 }
 .foot {
   color: grey;
   font-size: 12px;
   margin-top: 10px;
+}
+.ad-leaderboard-bottom {
+  margin: 0 auto;
+  display: none;
 }
 article {
   height: 600px;
@@ -59,7 +69,7 @@ article .ad-skyscraper {
 }
 article .right-skyscraper {
   float: right;
-  width: 170px;
+  width: 180px;
 }
 article .grid-skyscraper {
   float: left;
@@ -155,9 +165,9 @@ article .grid-skyscraper {
   text-transform: uppercase;
 }
 .words-list {
-  height: 465px;
+  height: 330px;
   overflow: scroll;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 .words-list ul {
   padding: 0;
@@ -172,6 +182,9 @@ article .grid-skyscraper {
 }
 .words-list li .word {
   text-transform: uppercase;
+  max-width: 120px;
+  overflow: hidden;
+  display: inline-block;
 }
 .words-list li .points {
   float: right;
@@ -183,10 +196,15 @@ article .grid-skyscraper {
 .walk {
   width: 100%;
   height: 40px;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
-.clear {
-  margin-top: 25px;
+.ad-halfpage {
+  display: none;
+  float: left;
+}
+.ad-largerect {
+  display: none;
+  float: left;
 }
 .beta-overlay {
   position: absolute;

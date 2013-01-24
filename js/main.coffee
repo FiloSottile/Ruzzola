@@ -23,13 +23,14 @@ b64_de = (data) ->
   res
 
 String.prototype.hashCode = ->
-    hash = 0
-    return hash if this.length == 0
-    for i in [0...this.length]
-        char = this.charCodeAt i
-        hash = ((hash<<5)-hash)+char
-        hash = hash & hash
-    hash
+  hash = 0
+  return hash if this.length == 0
+  for i in [0...this.length]
+      char = this.charCodeAt i
+      hash = ((hash<<5)-hash)+char
+      hash = hash & hash
+  hash
+
 
 chiavi = [1623324988, 1081239615, 95012445, 877169473, 3505988]
 
@@ -165,6 +166,7 @@ jQuery.get "data/it.bloom", (data) ->
 dom_grid = []
 multiplier_state = null
 current_word = null
+original_font_size = ''
 
 reset = ->
   $(".words-list ul").html ''
@@ -176,8 +178,9 @@ reset = ->
   multipliers = {}
   multiplier_state = null
   grid = []
-  multipliers = {}
   results = {}
+  $(".walk").prop('disabled', yes)
+  original_font_size = $('.current-word').css('font-size')
 
 populate_wordslist = (words) ->
   for [points, path, word] in words[0..50]
@@ -196,6 +199,9 @@ next = ->
     current_word = 0
   $(".words-list li").eq(current_word).toggleClass "active"
   $(".current-word").text $(".words-list li > span.word").eq(current_word).text()
+  $('.current-word').css('font-size', original_font_size)
+  while $(".current-word").width() > 400 # TODO
+    $('.current-word').css('font-size', parseInt($('.current-word').css('font-size'), 10) - 1 + 'px')
   $(".current-points").text $(".words-list li > span.points").eq(current_word).text()
   # for path_class in $(".words-list li").eq(current_word).attr('data-path-class').split(' ')
   #   $(".grid").toggleClass path_class
@@ -210,8 +216,18 @@ bad = ->
   next()
 
 go = ->
+  if not check_grid() then return
+  if not bloom.ready then return
   $('textarea').blur()
   walk()
+
+check_grid = ->
+  if (_.all [0...16], (x) -> grid[x] of values["it"])
+    $(".walk").prop('disabled', no)
+    true
+  else
+    $(".walk").prop('disabled', yes)
+    false
 
 
 jQuery(document).ready ->
@@ -226,8 +242,11 @@ jQuery(document).ready ->
     if i < 15
       $(dom_grid[i+1]).focus()
     grid[i] = $(this).val() or String.fromCharCode e.which
+    check_grid()
+    true
 
   multiplier_numbers =
+    48: ''
     49: DL
     50: TL
     51: DW
@@ -235,6 +254,8 @@ jQuery(document).ready ->
   $(".grid textarea").keydown (e) ->
     i = parseInt $(this).attr("data-grid-i"), 10
     if e.keyCode == 8
+      grid[i] = ''
+      check_grid()
       e.stopPropagation()
       if !$(this).val() and i > 0
         $(dom_grid[i-1]).focus()

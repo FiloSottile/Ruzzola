@@ -47,6 +47,10 @@ header.column-container {
 		display: inline-block;
 		margin: 0 0 0 20px;
 	}
+	.ad-leaderboard-top {
+		margin: 20px auto 0;
+		display: none;
+	}
 }
 
 
@@ -56,10 +60,12 @@ section.bottom {
 	display: none;
 	.good-button, .bad-button {
 		width: 250px;
-		height: 50px;
+		height: 60px;
 	}
-	.good-button {
-		margin-left: 160px;
+	.ad-banner {
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0 10px;
 	}
 }
 
@@ -70,6 +76,10 @@ section.bottom {
 	color: grey;
 	font-size: 12px;
 	margin-top: 10px;
+}
+.ad-leaderboard-bottom {
+	margin: 0 auto;
+	display: none;
 }
 
 // *************** MAIN ****************
@@ -83,7 +93,7 @@ article {
 
 	.right-skyscraper {
 		float: right;
-		width: 170px;
+		width: 180px;
 	}
 
 	.grid-skyscraper {
@@ -150,7 +160,6 @@ article {
 		cursor: pointer;
 	}
 }
-
 .grid td textarea[data-multiplier=DL], .multipliers td[data-multiplier=DL] {
 	background-color: #12af16;
 }
@@ -171,6 +180,8 @@ article {
 	display: none;
 	text-align: center;
 	margin: 0 auto;
+	//overflow: hidden;
+	//max-width: 400px;
 	h1, h3 {
 		margin: 0;
 	}
@@ -181,12 +192,10 @@ article {
 	}
 }
 
-
-
 .words-list {
-	height: 465px;
+	height: 480px - 150;
 	overflow: scroll;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	ul {
 		padding: 0;
 		margin: 0;
@@ -199,6 +208,9 @@ article {
 		border-top: 1px solid gray;
 		.word {
 			text-transform: uppercase;
+			max-width: 120px;
+			overflow: hidden;
+			display: inline-block;
 		}
 		.points {
 			float: right;
@@ -212,10 +224,16 @@ article {
 .clear, .walk {
 	width: 100%;
 	height: 40px;
-	margin-bottom: 10px;
+	margin-top: 10px;
 }
-.clear {
-	margin-top: 25px;
+
+.ad-halfpage {
+	display: none;
+	float: left;
+}
+.ad-largerect {
+	display: none;
+	float: left;
 }
 
 
