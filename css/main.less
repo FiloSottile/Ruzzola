@@ -133,6 +133,7 @@ article {
 }
 
 .multipliers {
+	display: none;
 	margin: 0 auto;
 	border-collapse: separate;
 	border-spacing: 20px;
@@ -167,6 +168,7 @@ article {
 }
 
 .current-info {
+	display: none;
 	text-align: center;
 	margin: 0 auto;
 	h1, h3 {
@@ -217,14 +219,58 @@ article {
 }
 
 
+// ************************* BETA ****************************
+
+.beta-overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: #000;
+	opacity: 0.9;
+	z-index: 99;
+}
+
+.beta-box {
+	position: absolute;
+	left: 50%;
+	width: 600px;
+	margin-left: -350px;
+	background-color: #DDD;
+	z-index: 100;
+	padding: 25px 50px;
+	top: 30%;
+	border-radius: 20px;
+	font-size: 1.5em;
+	line-height: 1.5em;
+	p {
+		position: relative;
+	}
+	input {
+		width: 60%;
+		right: 0;
+		position: absolute;
+	}
+}
+
+.beta-screen {
+	display: none;
+}
+
+
 // ************************* STATES ****************************
 
 .state-playing {
-	.multipliers { display: none; }
+	.current-info { display: block; }
 	section.bottom { display: block; }
 	canvas { display: block; }
 }
 
 .state-ready {
-	.current-info { display: none; }
+	.multipliers { display: block; }
+}
+
+.state-beta {
+	.beta-screen { display: block; }
 }

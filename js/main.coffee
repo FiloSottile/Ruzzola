@@ -22,6 +22,17 @@ b64_de = (data) ->
       res.push(o1, o2, o3)
   res
 
+String.prototype.hashCode = ->
+    hash = 0
+    return hash if this.length == 0
+    for i in [0...this.length]
+        char = this.charCodeAt i
+        hash = ((hash<<5)-hash)+char
+        hash = hash & hash
+    hash
+
+chiavi = [1623324988, 1081239615, 95012445, 877169473, 3505988]
+
 ###
       CHEAT LOGIC
 ###
@@ -268,3 +279,12 @@ jQuery(document).ready ->
   canvas.css('width', grid_size + 'px').css('height', grid_size + 'px')
   canvas.attr('width', grid_size).attr('height', grid_size)
 
+  if not $.cookie("chiave") or Math.abs($.cookie("chiave").toLowerCase().hashCode()) not in chiavi
+    $("html").addClass("state-beta")
+  $(".beta-box input").keyup ->
+    console.log Math.abs($(this).val().toLowerCase().hashCode())
+    if Math.abs($(this).val().toLowerCase().hashCode()) in chiavi
+      $(this).blur()
+      $('html').removeClass 'state-beta'
+      $.cookie("chiave", $(this).val())
+  $(".beta-box input").focus()
