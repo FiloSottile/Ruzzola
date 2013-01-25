@@ -81,8 +81,8 @@ calc_points = (word, path) ->
   mul = 1
   for own pos, type of multipliers
     if path.split(' ').indexOf(pos) != -1
-      res += values["it"][grid[pos].toLowerCase()] if type == DL
-      res += 2 * values["it"][grid[pos].toLowerCase()] if type == TL
+      res += values["it"][grid[pos]] if type == DL
+      res += 2 * values["it"][grid[pos]] if type == TL
       mul *= 2 if type == DW
       mul *= 3 if type == TW
   res *= mul
@@ -105,7 +105,7 @@ done = ->
 discover = (pos, len=0, word='', path='') ->
   len++
   path += " #{pos}"
-  word += grid[pos].toLowerCase()
+  word += grid[pos]
   [go, is_word] = bloom.test word
   found word, path.trim() if is_word
   if go
@@ -264,7 +264,7 @@ jQuery(document).ready ->
     i = parseInt $(this).attr("data-grid-i"), 10
     if i < 15
       $(dom_grid[i+1]).focus()
-    grid[i] = $(this).val() or String.fromCharCode e.which
+    grid[i] = $(this).val().toLowerCase() or String.fromCharCode(e.which).toLowerCase()
     check_grid()
     true
 

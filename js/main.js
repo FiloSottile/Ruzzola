@@ -146,10 +146,10 @@
       type = multipliers[pos];
       if (path.split(' ').indexOf(pos) !== -1) {
         if (type === DL) {
-          res += values["it"][grid[pos].toLowerCase()];
+          res += values["it"][grid[pos]];
         }
         if (type === TL) {
-          res += 2 * values["it"][grid[pos].toLowerCase()];
+          res += 2 * values["it"][grid[pos]];
         }
         if (type === DW) {
           mul *= 2;
@@ -208,7 +208,7 @@
     }
     len++;
     path += " " + pos;
-    word += grid[pos].toLowerCase();
+    word += grid[pos];
     _ref = bloom.test(word), go = _ref[0], is_word = _ref[1];
     if (is_word) {
       found(word, path.trim());
@@ -418,7 +418,7 @@
       if (i < 15) {
         $(dom_grid[i + 1]).focus();
       }
-      grid[i] = $(this).val() || String.fromCharCode(e.which);
+      grid[i] = $(this).val().toLowerCase() || String.fromCharCode(e.which).toLowerCase();
       check_grid();
       return true;
     });
