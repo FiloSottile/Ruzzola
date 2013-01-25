@@ -16,6 +16,15 @@
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/it_IT/all.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -43,8 +52,6 @@
         <div class="column-wrapper"><article class="column-container">
 
             <div class="ad-skyscraper" style="width: 160px; height: 600px; border: 1px solid black; box-sizing: border-box;"></div>
-            <div class="ad-halfpage" style="width: 300px; height: 600px; border: 1px solid black; box-sizing: border-box;"></div>
-            <div class="ad-largerect" style="width: 336px; height: 280px; border: 1px solid black; box-sizing: border-box;"></div>
 
             <div class="grid-skyscraper">
                 <div class="grid-container">
@@ -76,6 +83,22 @@
 
                 <button class="clear">Cancella</button>
                 <button class="walk">VIA</button>
+                <button class="new">Nuova partita</button>
+            </div>
+
+
+            <div class="ad-halfpage" style="width: 300px; height: 600px; border: 1px solid black; box-sizing: border-box;"></div>
+            <div class="ad-largerect" style="width: 336px; height: 280px; border: 1px solid black; box-sizing: border-box;"></div>
+            <div class="countdown-box">
+                Spero che la partita sia andata bene! Potrai giocarne una nuova tra:
+                <div class="countdown">00:<span>30</span></div>
+            </div>
+            <div class="countdown-box-end">
+                <button class="restart">Avvia una nuova partita!</button>
+            </div>
+            <div class="share-box">
+                Intanto che aspetti...
+                <div class="fb-like" data-href="http://facebook.com/RuzzleMap" data-send="false" data-width="336" data-show-faces="true" data-font="lucida grande"></div>
             </div>
 
         </article></div>

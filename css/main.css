@@ -68,15 +68,55 @@ article {
   height: 600px;
 }
 article .ad-skyscraper {
+  display: none;
   float: left;
 }
 article .right-skyscraper {
+  display: none;
   float: right;
   width: 180px;
 }
 article .grid-skyscraper {
+  display: none;
   float: left;
   margin: 0 30px;
+}
+article .ad-halfpage,
+article .ad-largerect,
+article .countdown-box,
+article .countdown-box-end,
+article .share-box {
+  display: none;
+  margin: 0 40px;
+  float: left;
+}
+article .countdown-box {
+  width: 336px;
+  margin-top: 20px;
+}
+article .countdown-box .countdown {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 3em;
+  line-height: 1em;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+article .countdown-box-end {
+  width: 336px;
+}
+article .countdown-box-end button {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+article .share-box {
+  width: 336px;
+}
+article .share-box .fb-like {
+  margin-top: 10px;
 }
 .grid-container {
   background-image: url("../img/pergamena.png");
@@ -195,19 +235,13 @@ article .grid-skyscraper {
 .words-list li.active {
   background-color: #ffe65d;
 }
-.clear,
-.walk {
+button.clear,
+button.walk,
+button.new {
+  display: none;
   width: 100%;
   height: 40px;
   margin-top: 10px;
-}
-.ad-halfpage {
-  display: none;
-  float: left;
-}
-.ad-largerect {
-  display: none;
-  float: left;
 }
 .beta-overlay {
   position: absolute;
@@ -252,9 +286,52 @@ article .grid-skyscraper {
 .state-playing canvas {
   display: block;
 }
+.state-playing .ad-skyscraper,
+.state-playing .grid-skyscraper,
+.state-playing .right-skyscraper {
+  display: block;
+}
+.state-playing .words-list {
+  height: 380px;
+}
+.state-playing button.new {
+  display: inline-block;
+}
 .state-ready .multipliers {
   display: block;
 }
+.state-ready .ad-skyscraper,
+.state-ready .grid-skyscraper,
+.state-ready .right-skyscraper {
+  display: block;
+}
+.state-ready button.walk,
+.state-ready button.clear {
+  display: inline-block;
+}
 .state-beta .beta-screen {
+  display: block;
+}
+.state-beta .ad-skyscraper,
+.state-beta .grid-skyscraper,
+.state-beta .right-skyscraper {
+  display: block;
+}
+.state-countdown .ad-halfpage {
+  display: block;
+}
+.state-countdown .ad-largerect {
+  display: block;
+}
+.state-countdown .countdown-box {
+  display: block;
+}
+.state-countdown .share-box {
+  display: block;
+}
+.state-countdown.state-countdown-end .countdown-box {
+  display: none;
+}
+.state-countdown.state-countdown-end .countdown-box-end {
   display: block;
 }

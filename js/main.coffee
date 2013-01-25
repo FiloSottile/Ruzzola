@@ -46,7 +46,7 @@ TW = "TW"
 values = {}
 values["it"] = { a : 1, b : 5, c : 2, d : 5, e : 1, f : 5, g : 8, h : 8, i : 1, l : 3, m : 3, n : 3, o : 1, p : 5, q : 8, r : 2, s : 2, t : 2, u : 3, v : 5, z : 8 }
 
-window.bloom = {}
+bloom = {}
 bloom.ready = false
 bloom.test = (w) ->
   if w.length == 14
@@ -167,10 +167,13 @@ dom_grid = []
 multiplier_state = null
 current_word = null
 original_font_size = ''
+timeout = null
 
 reset = ->
   $(".words-list ul").html ''
-  $("html").removeClass("state-playing").addClass("state-ready")
+  $("html").removeClass("state-playing")
+  $("html").removeClass("state-countdown").removeClass("state-countdown-end")
+  $("html").addClass("state-ready")
   current_word = null
   for cell in dom_grid
     $(cell).val('')
@@ -216,9 +219,12 @@ bad = ->
   next()
 
 go = ->
+  if not $("html").hasClass "state-ready" then return
   if not check_grid() then return
   if not bloom.ready then return
   $('textarea').blur()
+  timeout = setTimeout(enter_countdown, 2 * 60 * 1000)
+  $.cookie "game_start", new Date().getTime()
   walk()
 
 check_grid = ->
@@ -228,6 +234,23 @@ check_grid = ->
   else
     $(".walk").prop('disabled', yes)
     false
+
+enter_countdown = ->
+  if timeout?
+    clearTimeout(timeout)
+    timeout = null
+  $("html").removeClass("state-playing").removeClass("state-ready").addClass("state-countdown")
+  $(".countdown span").text("30")
+  $.cookie "countdown_start", new Date().getTime()
+  setTimeout(tick, 1000)
+
+tick = ->
+  count_n = parseInt $(".countdown span").text(), 10
+  $(".countdown span").text("0000#{count_n - 1}"[-2...])
+  if count_n - 1 > 0
+    setTimeout(tick, 1000)
+  else
+    $("html").addClass("state-countdown-end")
 
 
 jQuery(document).ready ->
@@ -277,8 +300,9 @@ jQuery(document).ready ->
       multiplier_state = null
       $(this).blur()
 
-  $(".walk").click go
-  $(".clear").click reset
+  $("button.walk").click go
+  $("button.new").click enter_countdown
+  $("button.clear, button.restart").click reset
   $(document).keydown (e) ->
     if e.keyCode == 13 and !current_word?
       go()
@@ -309,3 +333,12 @@ jQuery(document).ready ->
       $('html').removeClass 'state-beta'
       $.cookie("chiave", $(this).val())
   $(".beta-box input").focus()
+
+  elapsed_c = Math.floor((new Date().getTime() - parseInt $.cookie "countdown_start") / 1000)
+  elapsed_g = Math.floor((new Date().getTime() - parseInt $.cookie "game_start") / 1000)
+  if $.cookie("countdown_start") and elapsed_c < 30
+    $("html").removeClass("state-ready").addClass("state-countdown")
+    $(".countdown span").text(30 - elapsed_c)
+    setTimeout(tick, 1000)
+  else if $.cookie("game_start") and elapsed_g < 100
+    enter_countdown()
