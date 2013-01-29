@@ -482,12 +482,15 @@
     });
     $("button.walk").click(go);
     $("button.new").click(enter_countdown);
-    $("button.clear, button.restart").click(reset);
+    $("button.clear").click(reset);
     $(document).keydown(function(e) {
       if (e.keyCode === 13 && !(current_word != null)) {
         go();
         return dont_move(e);
       }
+    });
+    $("button.restart").click(function() {
+      return window.location.reload();
     });
     $(".good-button").click(next);
     $(document).keydown(function(e) {

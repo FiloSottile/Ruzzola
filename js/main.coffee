@@ -325,11 +325,13 @@ jQuery(document).ready ->
 
   $("button.walk").click go
   $("button.new").click enter_countdown
-  $("button.clear, button.restart").click reset
+  $("button.clear").click reset
   $(document).keydown (e) ->
     if e.keyCode == 13 and !current_word?
       go()
       dont_move(e)
+  $("button.restart").click ->
+    window.location.reload()
 
   $(".good-button").click next
   $(document).keydown (e) ->
