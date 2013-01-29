@@ -42,6 +42,19 @@ header.column-container .ad-leaderboard-top {
   margin: 20px auto 0;
   display: none;
 }
+.top-ready,
+.top-playing {
+  display: none;
+  padding: 0 !important;
+}
+.top-ready p,
+.top-playing p {
+  text-align: left;
+}
+.top-ready p.protip,
+.top-playing p.protip {
+  text-align: right;
+}
 section.bottom {
   display: none;
 }
@@ -299,6 +312,9 @@ button.new {
 .state-playing button.new {
   display: inline-block;
 }
+.state-playing .top-playing {
+  display: block;
+}
 .state-ready .multipliers {
   display: block;
 }
@@ -310,6 +326,9 @@ button.new {
 .state-ready button.walk,
 .state-ready button.clear {
   display: inline-block;
+}
+.state-ready .top-ready {
+  display: block;
 }
 .state-beta .beta-screen {
   display: block;
@@ -336,4 +355,7 @@ button.new {
 }
 .state-countdown.state-countdown-end .countdown-box-end {
   display: block;
+}
+.state-countdown .wide-container.top {
+  display: none;
 }

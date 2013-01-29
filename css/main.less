@@ -57,6 +57,20 @@ header.column-container {
 }
 
 
+// *************** WIDE TOP ****************
+
+.top-ready, .top-playing {
+	display: none;
+	padding: 0 !important;
+	p {
+		text-align: left;
+	}
+	p.protip {
+		text-align: right;
+	}
+}
+
+
 // *************** WIDE BOTTOM ****************
 
 section.bottom {
@@ -322,12 +336,14 @@ button.clear, button.walk, button.new {
 	.ad-skyscraper, .grid-skyscraper, .right-skyscraper { display: block; }
 	.words-list { height: 480px - 150 + 50; }
 	button.new { display: inline-block; }
+	.top-playing { display: block; }
 }
 
 .state-ready {
 	.multipliers { display: block; }
 	.ad-skyscraper, .grid-skyscraper, .right-skyscraper { display: block; }
 	button.walk, button.clear { display: inline-block; }
+	.top-ready { display: block; }
 }
 
 .state-beta {
@@ -344,4 +360,5 @@ button.clear, button.walk, button.new {
 		.countdown-box { display: none; }
 		.countdown-box-end { display: block; }
 	}
+	.wide-container.top { display: none; }
 }
