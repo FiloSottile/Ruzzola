@@ -31,6 +31,11 @@ String.prototype.hashCode = ->
       hash = hash & hash
   hash
 
+dont_move = (e) ->
+  e.preventDefault()
+  e.stopPropagation()
+  false
+
 
 chiavi = [1623324988, 1081239615, 95012445, 877169473, 3505988]
 
@@ -241,6 +246,7 @@ enter_countdown = ->
     timeout = null
   $("html").removeClass("state-playing").removeClass("state-ready").addClass("state-countdown")
   $(".countdown span").text("30")
+  $.cookie "game_start", '0'
   $.cookie "countdown_start", new Date().getTime()
   setTimeout(tick, 1000)
 
@@ -254,19 +260,11 @@ tick = ->
 
 
 jQuery(document).ready ->
-  reset()
-
   $(".grid textarea").each (i) ->
     dom_grid[i] = this
     $(this).attr "data-grid-i", i
 
-  $(".grid textarea").keypress (e) ->
-    i = parseInt $(this).attr("data-grid-i"), 10
-    if i < 15
-      $(dom_grid[i+1]).focus()
-    grid[i] = $(this).val().toLowerCase() or String.fromCharCode(e.which).toLowerCase()
-    check_grid()
-    true
+  reset()
 
   multiplier_numbers =
     48: ''
@@ -274,19 +272,39 @@ jQuery(document).ready ->
     50: TL
     51: DW
     52: TW
+  $(".grid textarea").keypress (e) ->
+    i = parseInt $(this).attr("data-grid-i"), 10
+    console.log 'keypress', e.which, i
+
+    if e.which of multiplier_numbers
+      multipliers[i] = multiplier_numbers[e.which]
+      $(this).attr "data-multiplier", multiplier_numbers[e.which]
+      dont_move(e)
+
+    else if e.which == 8
+      # Cause FF is DUMB! How do I stop the keypress from the keydown?
+      false
+
+    else if e.which
+      if i < 15
+        $(dom_grid[i+1]).focus()
+      grid[i] = $(this).val().toLowerCase() or String.fromCharCode(e.which).toLowerCase()
+      check_grid()
+      true
+
   $(".grid textarea").keydown (e) ->
     i = parseInt $(this).attr("data-grid-i"), 10
-    if e.keyCode == 8
-      grid[i] = ''
-      check_grid()
-      e.stopPropagation()
-      if !$(this).val() and i > 0
+    console.log 'keydown', e.which, i
+    if e.which == 8
+      if $(this).val()
+        grid[i] = ''
+        $(this).val('')
+      else if i > 0
+        grid[i-1] = ''
+        $(dom_grid[i-1]).val('')
         $(dom_grid[i-1]).focus()
-    if e.keyCode of multiplier_numbers
-      multipliers[i] = multiplier_numbers[e.keyCode]
-      $(this).attr "data-multiplier", multiplier_numbers[e.keyCode]
-      e.stopPropagation()
-      false
+      check_grid()
+      dont_move(e)
 
   $(".multipliers td").click ->
     multiplier_state = $(this).attr "data-multiplier"
@@ -306,18 +324,18 @@ jQuery(document).ready ->
   $(document).keydown (e) ->
     if e.keyCode == 13 and !current_word?
       go()
-      false
+      dont_move(e)
 
   $(".good-button").click next
   $(document).keydown (e) ->
     if e.keyCode == 32 and current_word?
       next()
-      false
+      dont_move(e)
   $(".bad-button").click bad
   $(document).keydown (e) ->
     if e.keyCode == 8 and current_word?
       bad()
-      false
+      dont_move(e)
 
   grid_size = $(".grid-container").width()
   canvas = $(".grid-container > canvas")
