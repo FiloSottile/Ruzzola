@@ -229,6 +229,7 @@ go = ->
   if not $("html").hasClass "state-ready" then return
   if not check_grid() then return
   if not bloom.ready then return
+  _gaq.push(['_trackEvent', 'Plays', 'go'])
   $('textarea').blur()
   timeout = setTimeout(enter_countdown, 2 * 60 * 1000)
   $.cookie "game_start", new Date().getTime()

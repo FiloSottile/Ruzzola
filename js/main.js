@@ -373,6 +373,7 @@
     if (!bloom.ready) {
       return;
     }
+    _gaq.push(['_trackEvent', 'Plays', 'go']);
     $('textarea').blur();
     timeout = setTimeout(enter_countdown, 2 * 60 * 1000);
     $.cookie("game_start", new Date().getTime());
