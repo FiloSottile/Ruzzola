@@ -342,15 +342,15 @@ jQuery(document).ready ->
   canvas.css('width', grid_size + 'px').css('height', grid_size + 'px')
   canvas.attr('width', grid_size).attr('height', grid_size)
 
-  if not $.cookie("chiave") or Math.abs($.cookie("chiave").toLowerCase().hashCode()) not in chiavi
-    $("html").addClass("state-beta")
-  $(".beta-box input").keyup ->
-    console.log Math.abs($(this).val().toLowerCase().hashCode())
-    if Math.abs($(this).val().toLowerCase().hashCode()) in chiavi
-      $(this).blur()
-      $('html').removeClass 'state-beta'
-      $.cookie("chiave", $(this).val())
-  $(".beta-box input").focus()
+  # if not $.cookie("chiave") or Math.abs($.cookie("chiave").toLowerCase().hashCode()) not in chiavi
+  #   $("html").addClass("state-beta")
+  # $(".beta-box input").keyup ->
+  #   console.log Math.abs($(this).val().toLowerCase().hashCode())
+  #   if Math.abs($(this).val().toLowerCase().hashCode()) in chiavi
+  #     $(this).blur()
+  #     $('html').removeClass 'state-beta'
+  #     $.cookie("chiave", $(this).val())
+  # $(".beta-box input").focus()
 
   elapsed_c = Math.floor((new Date().getTime() - parseInt $.cookie "countdown_start") / 1000)
   elapsed_g = Math.floor((new Date().getTime() - parseInt $.cookie "game_start") / 1000)
