@@ -85,7 +85,7 @@ calc_points = (word, path) ->
     res += values["it"][word.charAt n]
   mul = 1
   for own pos, type of multipliers
-    if path.split(' ').indexOf(pos) != -1
+    if _.indexOf(path.split(' '), pos) != -1
       res += values["it"][grid[pos]] if type == DL
       res += 2 * values["it"][grid[pos]] if type == TL
       mul *= 2 if type == DW
@@ -112,15 +112,16 @@ discover = (pos, len=0, word='', path='') ->
   path += " #{pos}"
   word += grid[pos]
   [go, is_word] = bloom.test word
-  found word, path.trim() if is_word
+  found word, path.replace(/^\s+|\s+$/g,'') if is_word
   if go
     for v_pos in vicini pos
-      if path.split(' ').indexOf("#{v_pos}") == -1
+      if _.indexOf(path.split(' '), "#{v_pos}") == -1
         discover v_pos, len, word, path
   workers -= 1 if len == 1
   done() if workers == 0
 
 draw_path = (path) ->
+  return if not Modernizr.canvas
   cell_width = $(".grid td").width()
   cell_spacing = parseInt $(".grid").css("border-spacing"), 10
   jump = cell_width + cell_spacing + 2 # border * 2
@@ -181,8 +182,8 @@ reset = ->
   $("html").addClass("state-ready")
   current_word = null
   for cell in dom_grid
-    $(cell).val('')
     $(cell).attr "data-multiplier", ""
+    $(cell).val('')
   multipliers = {}
   multiplier_state = null
   grid = []
@@ -215,7 +216,8 @@ next = ->
   #   $(".grid").toggleClass path_class
   draw_path $(".words-list li").eq(current_word).attr('data-path').split(' ')
   if current_word > 2
-    $(".words-list").scrollTop(46 * (current_word - 2))
+    # $(".words-list").scrollTop(46 * (current_word - 2))
+    $(".words-list")[0].scrollTop = 46 * (current_word - 2)  # die, IE
 
 
 bad = ->
@@ -279,7 +281,8 @@ jQuery(document).ready ->
     if e.which of multiplier_numbers
       multipliers[i] = multiplier_numbers[e.which]
       $(this).attr "data-multiplier", multiplier_numbers[e.which]
-      dont_move(e)
+      $(this).val($(this).val()) # Not a joke, an IE8 fix
+      false
 
     else if e.which == 8
       # Cause FF is DUMB! How do I stop the keypress from the keydown?
@@ -289,8 +292,9 @@ jQuery(document).ready ->
       if i < 15
         $(dom_grid[i+1]).focus()
       grid[i] = $(this).val().toLowerCase() or String.fromCharCode(e.which).toLowerCase()
+      $(this).val(grid[i])
       check_grid()
-      true
+      false
 
   $(".grid textarea").keydown (e) ->
     i = parseInt $(this).attr("data-grid-i"), 10
@@ -315,6 +319,7 @@ jQuery(document).ready ->
       $(".grid textarea").css "cursor", "auto"
       multipliers[parseInt $(this).attr("data-grid-i"), 10] = multiplier_state
       $(this).attr "data-multiplier", multiplier_state
+      $(this).val($(this).val()) # Again, not a joke, a IE7 fix
       multiplier_state = null
       $(this).blur()
 
@@ -337,10 +342,11 @@ jQuery(document).ready ->
       bad()
       dont_move(e)
 
-  grid_size = $(".grid-container").width()
-  canvas = $(".grid-container > canvas")
-  canvas.css('width', grid_size + 'px').css('height', grid_size + 'px')
-  canvas.attr('width', grid_size).attr('height', grid_size)
+  if Modernizr.canvas
+    grid_size = $(".grid-container").width()
+    canvas = $(".grid-container > canvas")
+    canvas.css('width', grid_size + 'px').css('height', grid_size + 'px')
+    canvas.attr('width', grid_size).attr('height', grid_size)
 
   # if not $.cookie("chiave") or Math.abs($.cookie("chiave").toLowerCase().hashCode()) not in chiavi
   #   $("html").addClass("state-beta")

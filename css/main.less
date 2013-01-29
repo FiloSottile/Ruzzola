@@ -59,7 +59,7 @@ header.column-container {
 
 // *************** WIDE TOP ****************
 
-.top-ready, .top-playing {
+.top-ready, .top-playing, .top-no-canvas {
 	display: none;
 	padding: 0 !important;
 	p {
@@ -68,6 +68,10 @@ header.column-container {
 	p.protip {
 		text-align: right;
 	}
+}
+.no-canvas .top-no-canvas {
+	display: block;
+	font-weight: bold;
 }
 
 
@@ -361,4 +365,30 @@ button.clear, button.walk, button.new {
 		.countdown-box-end { display: block; }
 	}
 	.wide-container.top { display: none; }
+}
+
+
+// **************************** IE7 ******************************
+// Warning: I influxed so much hate into this code that reading it mught be harmful
+
+html.lt-ie8 {
+	header.column-container h1, header.column-container h3 {
+		display: inline;
+	}
+	.multipliers {
+		margin: 0;
+	}
+	footer.column-container {
+		padding-top: 0;
+		h1 {
+			padding-top: 1em;
+			margin-top: 0;
+		}
+	}
+	.ad-banner {
+		display: inline;
+	}
+	.words-list li span.points {
+		margin-top: -26px;
+	}
 }

@@ -149,7 +149,7 @@
     for (pos in multipliers) {
       if (!__hasProp.call(multipliers, pos)) continue;
       type = multipliers[pos];
-      if (path.split(' ').indexOf(pos) !== -1) {
+      if (_.indexOf(path.split(' '), pos) !== -1) {
         if (type === DL) {
           res += values["it"][grid[pos]];
         }
@@ -216,13 +216,13 @@
     word += grid[pos];
     _ref = bloom.test(word), go = _ref[0], is_word = _ref[1];
     if (is_word) {
-      found(word, path.trim());
+      found(word, path.replace(/^\s+|\s+$/g, ''));
     }
     if (go) {
       _ref1 = vicini(pos);
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         v_pos = _ref1[_i];
-        if (path.split(' ').indexOf("" + v_pos) === -1) {
+        if (_.indexOf(path.split(' '), "" + v_pos) === -1) {
           discover(v_pos, len, word, path);
         }
       }
@@ -237,6 +237,9 @@
 
   draw_path = function(path) {
     var cell_spacing, cell_width, ctx, first, jump, path_i, path_x, path_y, start, _i, _len;
+    if (!Modernizr.canvas) {
+      return;
+    }
     cell_width = $(".grid td").width();
     cell_spacing = parseInt($(".grid").css("border-spacing"), 10);
     jump = cell_width + cell_spacing + 2;
@@ -305,8 +308,8 @@
     current_word = null;
     for (_i = 0, _len = dom_grid.length; _i < _len; _i++) {
       cell = dom_grid[_i];
-      $(cell).val('');
       $(cell).attr("data-multiplier", "");
+      $(cell).val('');
     }
     multipliers = {};
     multiplier_state = null;
@@ -343,7 +346,7 @@
     $(".current-points").text($(".words-list li > span.points").eq(current_word).text());
     draw_path($(".words-list li").eq(current_word).attr('data-path').split(' '));
     if (current_word > 2) {
-      return $(".words-list").scrollTop(46 * (current_word - 2));
+      return $(".words-list")[0].scrollTop = 46 * (current_word - 2);
     }
   };
 
@@ -432,7 +435,8 @@
       if (e.which in multiplier_numbers) {
         multipliers[i] = multiplier_numbers[e.which];
         $(this).attr("data-multiplier", multiplier_numbers[e.which]);
-        return dont_move(e);
+        $(this).val($(this).val());
+        return false;
       } else if (e.which === 8) {
         return false;
       } else if (e.which) {
@@ -440,8 +444,9 @@
           $(dom_grid[i + 1]).focus();
         }
         grid[i] = $(this).val().toLowerCase() || String.fromCharCode(e.which).toLowerCase();
+        $(this).val(grid[i]);
         check_grid();
-        return true;
+        return false;
       }
     });
     $(".grid textarea").keydown(function(e) {
@@ -470,6 +475,7 @@
         $(".grid textarea").css("cursor", "auto");
         multipliers[parseInt($(this).attr("data-grid-i"), 10)] = multiplier_state;
         $(this).attr("data-multiplier", multiplier_state);
+        $(this).val($(this).val());
         multiplier_state = null;
         return $(this).blur();
       }
@@ -497,10 +503,12 @@
         return dont_move(e);
       }
     });
-    grid_size = $(".grid-container").width();
-    canvas = $(".grid-container > canvas");
-    canvas.css('width', grid_size + 'px').css('height', grid_size + 'px');
-    canvas.attr('width', grid_size).attr('height', grid_size);
+    if (Modernizr.canvas) {
+      grid_size = $(".grid-container").width();
+      canvas = $(".grid-container > canvas");
+      canvas.css('width', grid_size + 'px').css('height', grid_size + 'px');
+      canvas.attr('width', grid_size).attr('height', grid_size);
+    }
     elapsed_c = Math.floor((new Date().getTime() - parseInt($.cookie("countdown_start"))) / 1000);
     elapsed_g = Math.floor((new Date().getTime() - parseInt($.cookie("game_start"))) / 1000);
     if ($.cookie("countdown_start") && elapsed_c < 30) {

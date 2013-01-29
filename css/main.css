@@ -43,17 +43,24 @@ header.column-container .ad-leaderboard-top {
   display: none;
 }
 .top-ready,
-.top-playing {
+.top-playing,
+.top-no-canvas {
   display: none;
   padding: 0 !important;
 }
 .top-ready p,
-.top-playing p {
+.top-playing p,
+.top-no-canvas p {
   text-align: left;
 }
 .top-ready p.protip,
-.top-playing p.protip {
+.top-playing p.protip,
+.top-no-canvas p.protip {
   text-align: right;
+}
+.no-canvas .top-no-canvas {
+  display: block;
+  font-weight: bold;
 }
 section.bottom {
   display: none;
@@ -358,4 +365,24 @@ button.new {
 }
 .state-countdown .wide-container.top {
   display: none;
+}
+html.lt-ie8 header.column-container h1,
+html.lt-ie8 header.column-container h3 {
+  display: inline;
+}
+html.lt-ie8 .multipliers {
+  margin: 0;
+}
+html.lt-ie8 footer.column-container {
+  padding-top: 0;
+}
+html.lt-ie8 footer.column-container h1 {
+  padding-top: 1em;
+  margin-top: 0;
+}
+html.lt-ie8 .ad-banner {
+  display: inline;
+}
+html.lt-ie8 .words-list li span.points {
+  margin-top: -26px;
 }
